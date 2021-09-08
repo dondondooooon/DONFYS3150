@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 a,x,y = ([] for i in range(3))  #Iniate empty lists
 
-f = open('prob2.txt','r')   #Opens the text file
+f = open('prob7.txt','r')   #Opens the text file
 for line in f:              #Loops through the text file's lines
     line = line.strip()     #Strips the line of blank spaces
     num = line.split(",")   #Splits the line according to the ","
@@ -15,10 +15,10 @@ f.close()
 
 for i in range(len(a)):
     x.append(float(a[i][0])) #Collects x-values
-    y.append(float(a[i][1])) #Collects y-values
+    y.append(float(a[i][1])) #Collects vt-values
 
 plt.plot(x,y)
 plt.xlabel('x')
-plt.ylabel('u(x)')
-plt.savefig('Figure_1.pdf')
+plt.ylabel('vt')
+plt.savefig('Figure_2.pdf')
 plt.show()
