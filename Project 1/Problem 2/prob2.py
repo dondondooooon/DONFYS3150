@@ -20,5 +20,10 @@ for i in range(len(a)):
 plt.plot(x,y)
 plt.xlabel('x')
 plt.ylabel('u(x)')
+<<<<<<< HEAD
 plt.savefig('Figure_1.pdf')
 plt.show()
+=======
+plt.show()
+plt.savefig('Figure_1.pdf')
+>>>>>>> origin

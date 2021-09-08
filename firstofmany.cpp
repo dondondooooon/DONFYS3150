@@ -5,12 +5,10 @@ using namespace std;
 
 int main()
 {
-    arma::vec x = arma::linspace(0,1,100);
-    cout << x(5)-x(4) << endl;
-    double y = 1.000/100.000000;
-    double g = pow(4,4);
-    cout << g << endl;
-    cout << y << endl;
+    double Nnew = 10;
+    for (int i = Nnew-1; i>0 ; i--){         
+        cout << i << endl;     
+    }
      
  return 0;
 }
