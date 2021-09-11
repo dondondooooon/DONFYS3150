@@ -1,24 +1,33 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-a,x,y = ([] for i in range(3))  #Iniate empty lists
+# Figure size (inches)
+figwidth = 5.5
+figheight = figwidth / 1.33333
+plt.figure(figsize=(figwidth, figheight))
 
-f = open('prob7.txt','r')   #Opens the text file
-for line in f:              #Loops through the text file's lines
-    line = line.strip()     #Strips the line of blank spaces
-    num = line.split(",")   #Splits the line according to the ","
-    a.append(num)           #Appends it into the matrix list
-f.close()
+for i in range(1,6): 
+    N = 10**i                      # Iterate through the different N-values
+    filename = f"prob7{N}.txt"     # Set name properly for text
+    #print(filename) for checking purposes
+    x,v,u = np.loadtxt(filename, usecols=(0,1,2), unpack=True)  # Unload correct text file
+    plt.plot(x,v,label=f'N={N}')                                # Plot v_n(x) vs. x
 
-#Is there a more efficient way to collect the data file? 
-# Maybe edit the original code that makes the data file to make it simpler for export and importing?
+#Plots numeric solution with different N values in the same plot
+plt.title("Numeric Solutions w/ N-values", fontsize=10)
+plt.xlabel("x")
+plt.ylabel("v_n(x)")
+plt.legend()
+plt.savefig("Approx_Numeric_Solutions.pdf")
+plt.show()
 
-for i in range(len(a)):
-    x.append(float(a[i][0])) #Collects x-values
-    y.append(float(a[i][1])) #Collects vt-values
-
-plt.plot(x,y)
-plt.xlabel('x')
-plt.ylabel('vt')
-plt.savefig('Figure_2.pdf')
+#Plots numeric vs exact solution in same plot for N=1000
+filename = "prob71000.txt"
+x,v,u = np.loadtxt(filename, usecols=(0,1,2), unpack=True)
+plt.plot(x,v, label='Approx. Solution')
+plt.plot(x,u, label='Exact Solution')
+plt.xlabel("x")
+plt.ylabel("u(x)")
+plt.legend()
+plt.savefig("Exact_vs._Approx.pdf")
 plt.show()
