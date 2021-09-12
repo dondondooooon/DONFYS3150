@@ -18,7 +18,7 @@ int main(){
     
         //Initialize vectors
         vec x = linspace(0,1,N);                    // Creates N linearly spaced vector from start to end
-        vec y = vec(N);                             // Initialize a vector for y-values of size N
+        vec y = vec(N);                             // Initialize a vector for f''(x) of size N
         vec ux = vec(N);                            // Initialize a vector for u(x) of size N
         vec g = vec(N);                             // g vector
         vec b = vec(Nnew).fill(2.);                 // Main-diagonal vector
@@ -29,7 +29,7 @@ int main(){
         vec vt = vec(N);                            // v-stjerne vector (The last two indexes for this vector will be empty)
         double h = x(1)-x(0);                       // h-Steps
 
-        //Loop for y-values and g-values
+        //Loop for y-values, ux-values and g-values
         for (int i=0; i < x.size(); i++){           // Loop through x vector indexes
             y(i) = f(x(i));                         // Fill in equation 1
             ux(i) = u(x(i));                         // Fill in equation 2
@@ -48,7 +48,7 @@ int main(){
             gt(i) = g(i) - (a(i)/bt(i-1))*gt(i-1);  // g-tilde vector def
         }
 
-        //Initialize end element for v-tilde vector
+        //Initialize end element for v-stjerne vector
         vt(Nnew-1) = gt(Nnew-1)/bt(Nnew-1);
     
         //Loop for v-stjerne vector

@@ -18,7 +18,7 @@ int main(){
     
         //Initialize vectors
         vec x = linspace(0,1,N);                    // Creates N linearly spaced vector from start to end
-        vec y = vec(N);                             // Initialize a vector for y-values of size N
+        vec y = vec(N);                             // Initialize a vector for f''(x) of size N
         vec ux = vec(N);                            // Initialize a vector for u(x) of size N
         vec g = vec(N);                             // g vector
         vec b = vec(Nnew).fill(2.);                 // Main-diagonal vector
@@ -58,9 +58,9 @@ int main(){
     
         // Writing them into the file
         for (int i=0; i<x.size(); i++){
-            ofile << setw(23) << setprecision(15) << scientific << x(i);     // x-values
-            ofile << setw(23) << setprecision(15) << scientific << vt(i);    // approx values
-            ofile << setw(23) << setprecision(15) << scientific << ux(i) << endl; // exact values
+            ofile << setw(20) << setprecision(12) << scientific << x(i);     // x-values
+            ofile << setw(20) << setprecision(12) << scientific << vt(i);    // approx values
+            ofile << setw(20) << setprecision(12) << scientific << ux(i) << endl; // exact values
         }
 
         ofile.close();                              // Close file
