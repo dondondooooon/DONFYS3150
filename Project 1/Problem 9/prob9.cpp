@@ -3,25 +3,22 @@
 //Declaration of Functions
 double u(double x);                                 // Analytical Exact Function 
 double f(double x);                                 // Original 2nd order derivative function
-// Vis hensyn på man øker 10-faktor i tid også... ta log10(tid)(?) i think
+
 int main(){
 
-    // Start measuring time
-    auto t1 = chrono::high_resolution_clock::now();
-
-    for(int i = 1; i < 8; i++){                     //Iterate N from 1 to 10^7 
+    for(int i = 1; i < 5; i++){                     //Iterate N from 1 to 10^7 
 
         int N = pow(10,i);                          //Number of data points that will be used
         double Nnew = N-2;                          //Length minus the two boundary points 
 
         //Makes a file.txt for the data points:
-        string filename = "prob8" + to_string(N) + ".txt";  
+        string filename = "prob7" + to_string(N) + ".txt";  
         ofstream ofile;                             //Create and open the output file 
         ofile.open(filename);                       //Connect it to filename                     
     
         //Initialize vectors
         vec x = linspace(0,1,N);                    // Creates N linearly spaced vector from start to end
-        vec y = vec(N);                             // Initialize a vector for y-values of size N
+        vec y = vec(N);                             // Initialize a vector for f''(x) of size N
         vec ux = vec(N);                            // Initialize a vector for u(x) of size N
         vec g = vec(N);                             // g vector
         vec b = vec(Nnew).fill(2.);                 // Main-diagonal vector
@@ -32,7 +29,7 @@ int main(){
         vec vt = vec(N);                            // v-stjerne vector (The last two indexes for this vector will be empty)
         double h = x(1)-x(0);                       // h-Steps
 
-        //Loop for y-values and g-values
+        //Loop for y-values, ux-values and g-values
         for (int i=0; i < x.size(); i++){           // Loop through x vector indexes
             y(i) = f(x(i));                         // Fill in equation 1
             ux(i) = u(x(i));                         // Fill in equation 2
@@ -51,36 +48,25 @@ int main(){
             gt(i) = g(i) - (a(i)/bt(i-1))*gt(i-1);  // g-tilde vector def
         }
 
-        //Initialize end element for v-tilde vector
+        //Initialize end element for v-stjerne vector
         vt(Nnew-1) = gt(Nnew-1)/bt(Nnew-1);
     
         //Loop for v-stjerne vector
         for (int i = Nnew-2; i >= 0 ; i--){         // Loop through N-2 indexes downwards starting from end index
             vt(i) = (gt(i)-c(i)*vt(i+1))/bt(i);     // v-stjerne vector def
         }
-
-        //Shift v-stjerne elements to the right	
-        double endbound = vt(N-1);	
-	    for (int i = N-1; i > 0; i--){	
-	    	vt(i) = vt(i-1);
-        }		
-	    vt[0] = endbound;
     
         // Writing them into the file
         for (int i=0; i<x.size(); i++){
-            ofile << setw(23) << setprecision(15) << scientific << x(i);     // x-values
-            ofile << setw(23) << setprecision(15) << scientific << vt(i);    // approx values
-            ofile << setw(23) << setprecision(15) << scientific << ux(i) << endl; // exact values
+            ofile << setw(15) << setprecision(5) << scientific << x(i);             // x-values
+            ofile << setw(15) << setprecision(5) << scientific << vt(i);            // approx values
+            ofile << setw(15) << setprecision(5) << scientific << ux(i) << endl;    // exact values
         }
 
         ofile.close();                              // Close file
     }   
     
-    // Stop measuring time
-    auto t2 = std::chrono::high_resolution_clock::now();
-    // Calculate elapsed time
-    double duration_seconds = chrono::duration<double>(t2 - t1).count();
-    // Ferdig
+    //Ferdig!
     cout << "Done!" << endl;
     return 0;
 }
