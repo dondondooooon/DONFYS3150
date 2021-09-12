@@ -58,9 +58,9 @@ int main(){
     
         // Writing them into the file
         for (int i=0; i<x.size(); i++){
-            ofile << setw(12) << setprecision(2) << scientific << x(i);             // x-values
-            ofile << setw(12) << setprecision(2) << scientific << vt(i);            // approx values
-            ofile << setw(12) << setprecision(2) << scientific << ux(i) << endl;    // exact values
+            ofile << setw(15) << setprecision(5) << scientific << x(i);             // x-values
+            ofile << setw(15) << setprecision(5) << scientific << vt(i);            // approx values
+            ofile << setw(15) << setprecision(5) << scientific << ux(i) << endl;    // exact values
         }
 
         ofile.close();                              // Close file
