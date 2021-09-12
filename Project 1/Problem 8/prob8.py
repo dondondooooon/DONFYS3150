@@ -44,7 +44,8 @@ for k in range(2):
             log10relerr = np.log10(epsilon)
 
             # Get the maximum relative error
-            eps_max[i] = np.max(epsilon)
+            #eps_max[i] = np.max(epsilon)
+            eps_max[i] = np.max(log10relerr)    # with logs
 
             # Plot x vs. log10relative_error
             plt.plot(x,log10relerr,'--',label=f'N={N}')    
