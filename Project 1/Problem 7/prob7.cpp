@@ -6,7 +6,7 @@ double f(double x);                                 // Original 2nd order deriva
 
 int main(){
 
-    for(int i = 1; i < 5; i++){                     //Iterate N from 1 to 10^7 
+    for(int i = 1; i < 5; i++){                     //Iterate N from 10 to 10^7 
 
         int N = pow(10,i);                          //Number of data points that will be used
         double Nnew = N-2;                          //Length minus the two boundary points 
