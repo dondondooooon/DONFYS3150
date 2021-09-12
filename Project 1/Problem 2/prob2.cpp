@@ -9,10 +9,10 @@ int main(){
     ofile.open(filename);                   //Connect it to filename
 
     //Parameters for matrix
-    double N = 1000;                         //Number of data points that will be used
-    mat A = mat(N,2);           // Creates an Nx2 matrix
-    A.col(0) = linspace(0,1,N);       // Creates N linearly spaced vector from start to end
-    vec sz = A.col(0);                //Used to get the size of one column in the matrix
+    double N = 1000;                        //Number of data points that will be used
+    mat A = mat(N,2);                       // Creates an Nx2 matrix
+    A.col(0) = linspace(0,1,N);             // Creates N linearly spaced vector from start to end
+    vec sz = A.col(0);                      //Used to get the size of one column in the matrix
     
     //The Loop
     for (int i=0; i < sz.size() ; i++){     //Loop through x vector indexes

@@ -6,7 +6,7 @@ double f(double x);                                 // Original 2nd order deriva
 
 int main(){
 
-    for(int i = 1; i < 6; i++){                     //Iterate N from 1 to 10^7 
+    for(int i = 1; i < 5; i++){                     //Iterate N from 1 to 10^7 
 
         int N = pow(10,i);                          //Number of data points that will be used
         double Nnew = N-2;                          //Length minus the two boundary points 
@@ -55,19 +55,12 @@ int main(){
         for (int i = Nnew-2; i >= 0 ; i--){         // Loop through N-2 indexes downwards starting from end index
             vt(i) = (gt(i)-c(i)*vt(i+1))/bt(i);     // v-stjerne vector def
         }
-
-        //Shift v-stjerne elements to the right	
-        double endbound = vt(N-1);	
-	    for (int i = N-1; i > 0; i--){	
-	    	vt(i) = vt(i-1);
-        }		
-	    vt[0] = endbound;
     
         // Writing them into the file
         for (int i=0; i<x.size(); i++){
-            ofile << setw(12) << setprecision(2) << scientific << x(i);     // x-values
-            ofile << setw(12) << setprecision(2) << scientific << vt(i);    // approx values
-            ofile << setw(12) << setprecision(2) << scientific << ux(i) << endl; // exact values
+            ofile << setw(12) << setprecision(2) << scientific << x(i);             // x-values
+            ofile << setw(12) << setprecision(2) << scientific << vt(i);            // approx values
+            ofile << setw(12) << setprecision(2) << scientific << ux(i) << endl;    // exact values
         }
 
         ofile.close();                              // Close file
