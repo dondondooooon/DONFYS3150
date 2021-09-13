@@ -3,7 +3,7 @@
 //Declaration of Functions
 double u(double x);                   // Analytical Exact Function 
 double f(double x);                   // Original 2nd order derivative function
-// Vis hensyn på man øker 10-faktor i tid også... ta log10(tid)(?) i think
+
 int main(){
 
 for (int j=1; j<11; j++){           // Iterate 10 for reliable results
