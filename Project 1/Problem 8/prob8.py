@@ -51,13 +51,13 @@ for k in range(2):
             plt.plot(x,log10relerr,'--',label=f'N={N}')    
     
     name = [r'$log_{10}(\Delta_{i})$',r'$log_{10}(\epsilon_{i})$']
-    tittel = [r'Log10 of Absolute Error vs. $x_{i}$',r'Log10 of Relative Error vs. $x_{i}$']
+    tittel = [r'$x_{i}$ vs. Log10 of Absolute Error',r'$x_{i}$ vs. Log10 of Relative Error']
     savename = ['logAbsError_plot.pdf','logRelError_plot.pdf']
     plt.xlabel('x')
     plt.ylabel(name[k])
     plt.title(tittel[k], fontsize=10)
     plt.legend(loc='upper right')
-    plt.savefig(savename[k])
+    #plt.savefig(savename[k])
     plt.show()
 
 if k==1:
@@ -67,9 +67,9 @@ if k==1:
 
     # Plot Max. Relative Error vs. N
     plt.plot(n,eps_max,'o')
-    plt.xlabel('N')
+    plt.xlabel(r'10^N')
     plt.ylabel(r'$\epsilon_{i}$')
     plt.xticks(np.arange(1,len(n)+1))
     plt.title(r'Max. $\epsilon_{i}$ vs. N', fontsize=10)
-    plt.savefig("Max_Relative_Error.pdf")
+    #plt.savefig("Max_Relative_Error.pdf")
     plt.show()
