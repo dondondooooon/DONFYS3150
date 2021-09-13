@@ -41,8 +41,7 @@ int main(){
 
         //Loop for b- and g-tilde vectors
         for (int i=1; i < Nnew ; i++){              // Loop through N-2 indexes starting from 1
-            double k = double(i);
-            bt(i) = (k+1)/k;                        // b-tilde vector def
+            bt(i) = (double(i)+1)/double(i);        // b-tilde vector def
             gt(i) = g(i) + (1/bt(i-1))*gt(i-1);     // g-tilde vector def
         }
 

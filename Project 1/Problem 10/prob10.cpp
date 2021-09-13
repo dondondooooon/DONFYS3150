@@ -15,32 +15,37 @@ ofile.open(filename);
 
         int N = pow(10,i);              //Number of data points that will be used
         double Nnew = N-2;              //Length minus the two boundary points                  
-    
-        // Start measuring time for general
-        auto gen_t1 = chrono::high_resolution_clock::now();
-        // For General Algorithm
-        //Initialize vectors
         vec x = linspace(0,1,N);        // Creates N linearly spaced vector from start to end
         vec y = vec(N);                 // Initialize a vector for y-values of size N
         vec ux = vec(N);                // Initialize a vector for u(x) of size N
         vec g = vec(N);                 // g vector
         vec bt = vec(Nnew);             // b-tilde vector
         vec gt = vec(Nnew);             // g-tilde vector
-        vec vt = vec(N);                // v-stjerne vector (The last two indexes for this vector will be empty)
+        vec vt = vec(N);                // v-stjerne vector 
+        vec bt2 = vec(Nnew);             // b-tilde vector
+        vec gt2 = vec(Nnew);             // g-tilde vector
+        vec vt2 = vec(N);                // v-stjerne vector
         double h = x(1)-x(0);           // h-Steps
-        vec b = vec(Nnew).fill(2.);     // Main-diagonal vector
-        vec a = vec(Nnew).fill(-1.);    // Sub-diagonal vector
-        vec c = vec(Nnew).fill(-1.);    // Super-diagonal vector
+        //Loop for y-values, ux-values and g-values
         for (int i=0; i < x.size(); i++){   // Loop for y-values and g-values
             y(i) = f(x(i));                 // Fill in equation 1
             ux(i) = u(x(i));                // Fill in equation 2
             g(i) = pow(h,2)*y(i);           // Fill in indexes in g-vector (h^2*f_i)
         }
         //Initialze Boundaries
-        bt(0) = b(0);                    // b-tilde initial
         gt(0) = g(0);                    // g-tilde initial
+        gt2(0) = g(0);                   // -"-
         g(0) = g(0) + ux(0);             // g initial
         g(N-1) = g(N-1) + ux(N-1);       // g end
+
+        // Start measuring time for GENERAL
+        auto gen_t1 = chrono::high_resolution_clock::now();
+        //Initialize vectors
+        vec b = vec(Nnew).fill(2.);     // Main-diagonal vector
+        vec a = vec(Nnew).fill(-1.);    // Sub-diagonal vector
+        vec c = vec(Nnew).fill(-1.);    // Super-diagonal vector
+        bt(0) = b(0);                   // b-tilde initial
+        
         //Loop for b- and g-tilde vectors
         for (int i=1; i < Nnew ; i++){              // Loop through N-2 indexes starting from 1
             bt(i) = b(i) - (a(i)/bt(i-1))*c(i-1);   // b-tilde vector def
@@ -56,43 +61,23 @@ ofile.open(filename);
         auto gen_t2 = std::chrono::high_resolution_clock::now();
 
 
-        // Start measuring time for special
+        // Start measuring time for SPECIAL
         auto sps_t1 = chrono::high_resolution_clock::now();
-        //Initialize vectors
-        vec x2 = linspace(0,1,N);                    // Creates N linearly spaced vector from start to end
-        vec y2 = vec(N);                             // Initialize a vector for f''(x) of size N
-        vec ux2 = vec(N);                            // Initialize a vector for u(x) of size N
-        vec g2 = vec(N);                             // g vector
-        vec bt2 = vec(Nnew);                         // b-tilde vector
-        vec gt2 = vec(Nnew);                         // g-tilde vector
-        vec vt2 = vec(N);                            // v-stjerne vector (The last two indexes for this vector will be empty)
-        double h2 = x(1)-x(0);                       // h-Steps
-        //Loop for y-values, ux-values and g-values
-        for (int i=0; i < x2.size(); i++){           // Loop through x vector indexes
-            y2(i) = f(x2(i));                         // Fill in equation 1
-            ux2(i) = u(x(i));                         // Fill in equation 2
-            g2(i) = pow(h2,2)*y2(i);                   // Fill in indexes in g-vector (h^2*f_i)
-        }
-        //Initialze Boundaries
         bt2(0) = 2.;                                 // b-tilde initial
-        gt2(0) = g2(0);                               // g-tilde initial
-        g2(0) = g2(0) + ux2(0);                        // g initial
-        g2(N-1) = g2(N-1) + ux2(N-1);                  // g end
+        
         //Loop for b- and g-tilde vectors
-        for (int i=1; i < Nnew ; i++){              // Loop through N-2 indexes starting from 1
-            double k = double(i);
-            bt2(i) = (k+1)/k;                        // b-tilde vector def
-            gt2(i) = g2(i) + (1/bt2(i-1))*gt2(i-1);     // g-tilde vector def
+        for (int i=1; i < Nnew ; i++){                 // Loop through N-2 indexes starting from 1
+            bt2(i) = (double(i)+1)/double(i);          // b-tilde vector def
+            gt2(i) = g(i) + (1/bt2(i-1))*gt2(i-1);     // g-tilde vector def
         }
         //Initialize end element for v-stjerne vector
         vt2(Nnew-1) = gt2(Nnew-1)/bt2(Nnew-1);
         //Loop for v-stjerne vector
         for (int i = Nnew-2; i >= 0 ; i--){         // Loop through N-2 indexes downwards starting from end index
-            vt2(i) = (gt2(i)+vt2(i+1))/bt2(i);          // v-stjerne vector def
+            vt2(i) = (gt2(i)+vt2(i+1))/bt2(i);      // v-stjerne vector def
         }
-        // Stop measuring time for general
+        // Stop measuring time for special
         auto sps_t2 = std::chrono::high_resolution_clock::now();
-        
 
         // Calculate elapsed time
         double duration_seconds1 = chrono::duration<double>(gen_t2 - gen_t1).count();

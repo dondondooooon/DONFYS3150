@@ -9,8 +9,8 @@ for i in range(1,11):
     # Iterate 1 to 11 and find correct .txt file  
     filename = f"{i}_timedata.txt"
     tg,ts = np.loadtxt(filename, usecols=(0,1), unpack=True) # Unload the 2 columns 
-    G = np.vstack([G,np.transpose(np.log(tg))])
-    S = np.vstack([S,np.transpose(np.log(ts))])
+    G = np.vstack([G,np.transpose(np.log10(tg))])
+    S = np.vstack([S,np.transpose(np.log10(ts))])
 
 G = np.delete(G,(0), axis=0)
 S = np.delete(S,(0), axis=0)
