@@ -1,44 +1,49 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
-eps_max = np.zeros(8,float)
+G = np.empty([1,6])
+S = np.empty([1,6])
 
-fig, (ax1,ax2,ax3) = plt.subplots(3)
-#for ax in fig.get_axes():
-#    ax.label_outer()
+for i in range(1,11):
+    # Iterate 1 to 11 and find correct .txt file  
+    filename = f"{i}_timedata.txt"
+    tg,ts = np.loadtxt(filename, usecols=(0,1), unpack=True) # Unload the 2 columns 
+    G = np.vstack([G,np.transpose(np.log(tg))])
+    S = np.vstack([S,np.transpose(np.log(ts))])
 
-# Loop through 0-7
-for i in range(1,8):         
-    # Iterate through N and find correct .txt file
-    N = 10**i    
-    filename = f"prob8{N}.txt"
-    x,v,u = np.loadtxt(filename, usecols=(0,1,2), unpack=True)   # Unload correct text file 
+G = np.delete(G,(0), axis=0)
+S = np.delete(S,(0), axis=0)
 
-    # Remove borders initial and end because they're equal to 0? it weird points
-    x = np.delete(x, [0,-1], None)
-    v = np.delete(v, [0,-1], None)
-    u = np.delete(u, [0,-1], None)
-    #x = np.log10(x)                     #logify x values
-    print(i,"  ",filename, "   ", v[0] , " space! " , u[-1], "\n")      #Checking purposes
+print("The average time taken for general algorithm from n=10 to n=10^7 respectively is: ", G.mean(axis=0))
+print("The average time taken for special algorithm from n=10 to n=10^7 respectively is: ", S.mean(axis=0))
 
-    #Compute Arrays for absolute and relative error, and log10 of them
-    delta = np.absolute(v-u)
-    epsilon = np.absolute(delta/u)
-    log10abserr = np.log10(delta)
-    log10relerr = np.log10(epsilon)
+#This Plots the Table
+"""
+# Plot 1
+fig, ax1 = plt.subplots(figsize=(14,4))
+fig.patch.set_visible(False)
+ax1.axis('off') 
+ax1.axis('tight') 
 
-    # Get the maximum relative error
-    eps_max[i] = np.max(epsilon)
+dfg = pd.DataFrame(G, columns=np.logspace(1,6,num=6,base=10,dtype='int'))
+ax1.table(cellText=dfg.values, colLabels=dfg.columns, loc='center')
 
-    # Plot log10errors as a function of x_i
-    ax1.plot(x,log10abserr,label=f'N={N}')
-    ax2.plot(x,log10relerr,label=f'N={N}')
-    ax3.plot(x,epsilon,label=f'N={N}')
-    
-print(eps_max)
-ax1.set(xlabel="x", ylabel=r'$log_{10}(\Delta_{i})$')
-ax2.set(xlabel="x", ylabel=r'$log_{10}(\epsilon_{i})$')
-ax3.set(xlabel="x", ylabel=r'$\epsilon_{i})$')
-plt.legend()
-#plt.savefig("Error Plots.pdf")
+ax1.set_title('General Algorithm')
+fig.tight_layout()
+plt.savefig('TimeTest_General.pdf')
+plt.show()  
+
+# Plot 2
+fig, ax2 = plt.subplots(figsize=(14,3))
+fig.patch.set_visible(False)
+ax2.axis('off') 
+ax2.axis('tight') 
+
+dfs = pd.DataFrame(S, columns=np.logspace(1,6,num=6,base=10,dtype='int'))
+ax2.table(cellText=dfs.values, colLabels=dfs.columns, loc='center')
+
+ax2.set_title('Special Algorithm')
+plt.savefig('TimeTest_Special.pdf')
 plt.show()
+"""
