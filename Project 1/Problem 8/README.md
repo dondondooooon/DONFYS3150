@@ -8,7 +8,9 @@ C++ code that uses the general algorithm for solving Av=g for a tridiagonal matr
 Outputs x,v, and u(x) to a file the approriate file prob8{N}.txt where N is indicates the length of xi used.
 
 Build command: g++ prob8.cpp -o prob8.exe
+
 (for MacOs): g++ -std=c++11 prob8.cpp -larmadillo -o prob8.exe
+
 Run command: ./prob8.exe
 
 
