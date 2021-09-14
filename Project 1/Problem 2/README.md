@@ -6,7 +6,9 @@ C++ code that computes u(x) in Eq.2 in Project 1 at a point xi for N = 1000 elem
 Outputs the result to a file prob2.txt.
 
 Build command: g++ prob2.cpp -o prob2.exe
+
 (for MacOs): g++ -std=c++11 prob2.cpp -larmadillo -o prob2.exe
+
 Run command: ./prob2.exe
 
 
