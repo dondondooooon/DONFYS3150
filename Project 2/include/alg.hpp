@@ -15,7 +15,4 @@ using namespace arma;
 // Sets up and returns a tridiagonal matrix A of size N
 void matrix(double &N, mat &A);
 
-// Solves for the eigen values and vectors of a given matrix
-//tuple<arma::vec, arma::vec> solveig(arma::mat A);
-
 #endif
