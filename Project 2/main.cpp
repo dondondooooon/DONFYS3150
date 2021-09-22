@@ -20,7 +20,7 @@ int main()
     mat envec = normalise(eigvec,1,0);
     //Print check
     cout << "This is the eigenvalues; " << endl << eigval << endl;
-    cout << endl << "This is the eigenvectors in a matrix: " << endl << envec << endl;
+    cout << endl << "This is the eigenvectors in a matrix: " << endl << eigvec << endl;
 
     // Done
     return 0;
