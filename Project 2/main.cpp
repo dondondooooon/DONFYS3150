@@ -4,7 +4,8 @@
 
 int main()
 {
-    double N = 3;
+    // Sets up tridiagonal matrix A for N = 6
+    double N = 6;
     mat A = mat(N,N).fill(0.);
     matrix(N,A);
     cout << "This is the matrix: " << endl;
