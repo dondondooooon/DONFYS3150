@@ -8,6 +8,8 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
+using namespace std;
+using namespace arma;
 
 // Utility Function Declarations
 

@@ -1,21 +1,27 @@
 #include "alg.hpp"
 
 // Sets up and returns a tridiagonal matrix A of size N
-arma::mat matrix(double N)
+void matrix(double &N, mat &A)
 {
-    mat A = mat(N,N).fill(0.)
     for (int i=0; i < N ; i++){  
-        double A(i,i) = 2;
+        A(i,i) = 2;
+        /*for (int j=0; i < N ; j++){
+            if (i==j)
+            {
+                A(i,j) = 2;
+            }
+            if (j+1 < N-1)
+            {
+                A(i,j+1) = 1;
+            }
+            if (j-1 < N-1)
+            {
+                A(i,j-1) = 1;
+            }
+        }*/
     }
-    // Controlled to test with size N = 3 first
-    double A(1,0) =  1;
-    double A(1,2) = 1;
-    double A(2,0) = 1;
-    double A(2,2) = 1;
-
-    return(A);
 }
-
+/*
 tuple<arma::vec, arma::mat> solveig(arma::mat A)
 {
     arma::vec eigval;
@@ -28,3 +34,4 @@ tuple<arma::vec, arma::mat> solveig(arma::mat A)
 
     return{eigval,eigvec};
 }
+*/
