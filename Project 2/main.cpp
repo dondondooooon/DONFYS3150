@@ -8,9 +8,20 @@ int main()
     double N = 6;
     mat A = mat(N,N).fill(0.);
     matrix(N,A);
-    cout << "This is the matrix: " << endl;
-    cout << A;
+    //Print check
+    //cout << "This is the matrix: " << endl;
+    //cout << A;
     
+    // Solve eigen things:^))
+    vec eigval;
+    mat eigvec; 
+    eig_sym(eigval,eigvec,A);
+    // Normalize
+    mat envec = normalise(eigvec,1,0);
+    //Print check
+    cout << "This is the eigenvalues; " << endl << eigval << endl;
+    cout << endl << "This is the eigenvectors in a matrix: " << endl << envec << endl;
+
     // Done
     return 0;
 }
