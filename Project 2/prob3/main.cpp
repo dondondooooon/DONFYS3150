@@ -7,23 +7,28 @@ int main()
     // Sets up tridiagonal matrix A for N = 6
     double N = 6;
     mat A = mat(N,N).fill(0.);
+    mat v = mat(N,N).fill(0.);
+    vec lam = vec(N).fill(0.);
     matrix(N,A);
     //Print check
     cout << "This is the matrix: " << endl;
     cout << A;
     
-    // Solve eigen things:^))
+    // Eig_sym
     vec eigval;
     mat eigvec; 
     eig_sym(eigval,eigvec,A);
+    cout << "eig_sym eigenvalues: " << endl << eigval << endl;
+    cout << endl << "eig_sym eigenvectors: " << endl << eigvec << endl;
+    
+    // Analytisk Eig
+    eigen(N,lam,v);
     // Normalize
-    //mat envec = normalise(eigvec,1,0);
-    //Print check
-    cout << "This is the eigenvalues; " << endl << eigval << endl;
-    cout << endl << "This is the eigenvectors in a matrix: " << endl << eigvec << endl;
-    //cout << endl << "Normalized egenvektor: " << endl << envec << endl;
+    mat vnorm = normalise(v);
+    cout << "Analytical eigenvalues: " << endl << lam << endl;
+    //cout << "Analytical eigenvectors: " << endl << v << endl;
+    cout << "Normalized analytical eigenvectors: " << endl << vnorm << endl;
 
-    //cout << endl << "Normal?: " << endl << eigval.row(0)/normalise(eigval.row(0),1) << endl;
     // Done
     return 0;
 }
