@@ -23,7 +23,7 @@ int main()
     cout << endl << "This is the eigenvectors in a matrix: " << endl << eigvec << endl;
     //cout << endl << "Normalized egenvektor: " << endl << envec << endl;
 
-    cout << endl << "Normal?: " << endl << eigval.row(0)/normalise(eigval.row(0),1) << endl;
+    //cout << endl << "Normal?: " << endl << eigval.row(0)/normalise(eigval.row(0),1) << endl;
     // Done
     return 0;
 }
