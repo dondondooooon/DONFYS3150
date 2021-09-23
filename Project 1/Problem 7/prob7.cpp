@@ -32,8 +32,8 @@ int main(){
         //Loop for y-values, ux-values and g-values
         for (int i=0; i < x.size(); i++){           // Loop through x vector indexes
             y(i) = f(x(i));                         // Fill in equation 1
-            ux(i) = u(x(i));                         // Fill in equation 2
-            g(i) = pow(h,2)*y(i);                   // Fill in indexes in g-vector (h^2*f_i)
+            ux(i) = u(x(i));                        // Fill in equation 2
+            g(i) = h*h*y(i);                        // Fill in indexes in g-vector (h^2*f_i)
         }
 
         //Initialze Boundaries
