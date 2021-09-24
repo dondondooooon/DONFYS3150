@@ -32,3 +32,20 @@ void eigen(double& N, vec& lam, mat& v)
         }
     }
 }
+
+double max_offdiag_symmetric(const mat& A, int& k, int &l){
+    double max = 0.0;
+    for (int i = 0; i < sqrt(A.size()); i++){
+        for (int j = 0; j < sqrt(A.size()); j++){
+            if (i!=j){
+                if (A(i,j)>max){
+                    max = A(i,j);
+                    k = i+1;
+                    l = j+1;
+                }
+            }
+                
+            }
+        }
+    return (max);
+}

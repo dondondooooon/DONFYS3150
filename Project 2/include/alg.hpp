@@ -19,4 +19,6 @@ void matrix(double &N, mat &A);
 // Sets up the analytical eigenvalues and vectors
 void eigen(double& N, vec& lam, mat& B);
 
+double max_offdiag_symmetric(const mat& A, int& k, int &l);
+
 #endif
