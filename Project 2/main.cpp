@@ -19,8 +19,8 @@ int main()
     ofile.open(filename);   //Connect it to filename
 
     // Loop for N: 
-    for (int i=0; i < 10; i++){
-        N = int(n(i));
+    for (int i=0; i < 9; i++){
+        double N = double(n(i));
         double maxiter = N*N*N;
         vec anl_eigval = vec(N).fill(0.);
         mat anl_eigvec = mat(N,N).fill(0.);
@@ -79,6 +79,7 @@ int main()
         ofile << setw(12) << setprecision(3) << scientific << N;     // N values
         ofile << setw(12) << setprecision(3) << scientific << iter << endl;    // Iterations values
     }
+    ofile.close();
 
     // Done
     return 0;
