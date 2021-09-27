@@ -4,13 +4,6 @@
 
 int main()
 {
-    //Initiazlization
-    vec arma_eigval;
-    mat arma_eigvec; 
-    int k,l = 0.0;
-    int iter = 0;
-    double eps = 1.0e-8;
-    bool converged {false};
     vec n = linspace(2,10,9);
 
     //Makes a file.txt for the data points:
@@ -20,6 +13,13 @@ int main()
 
     // Loop for N: 
     for (int i=0; i < 9; i++){
+        //Initiazlization
+        vec arma_eigval;
+        mat arma_eigvec; 
+        int k,l = 0.0;
+        int iter = 0;
+        double eps = 1.0e-8;
+        bool converged {false};
         double N = double(n(i));
         double maxiter = N*N*N;
         vec anl_eigval = vec(N).fill(0.);
