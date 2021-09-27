@@ -15,7 +15,7 @@ using namespace arma;
 // variable, instead of returning a new variable. (Hence "void" as return type.)
 
 // Sets up and returns a tridiagonal matrix A of size N
-void matrix(double &N, mat &A);
+mat create_trimatsym(double N);
 
 // Sets up the analytical eigenvalues and vectors
 void eigen(double& N, vec& lam, mat& B);

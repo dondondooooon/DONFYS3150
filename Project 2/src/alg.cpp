@@ -1,14 +1,14 @@
 #include "alg.hpp"
 
 // Sets up and returns a tridiagonal matrix A of size N
-void matrix(double &N, mat &A)
+mat create_trimatsym(double N)
 {
     double n = N+1;
     double h = 1/n;
     double a = -1/(h*h);
     double d = 2/(h*h);
+    mat A = mat(N,N,fill::eye) * d;
     for (int i=0; i < N ; i++){  
-        A(i,i) = d;
         if (i+1<N){
             A(i,i+1) = a;
         }
@@ -16,6 +16,7 @@ void matrix(double &N, mat &A)
             A(i,i-1) = a;
         }
     }
+    return A;
 }
 
 // Sets up the analytical eigen values and vectors
