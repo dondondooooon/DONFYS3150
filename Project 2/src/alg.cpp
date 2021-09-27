@@ -36,14 +36,15 @@ void eigen(double& N, vec& lam, mat& v)
 // Max. Off-Diagonal Alg.
 double max_offdiag_symmetric(const mat& A, int& k, int& l){
     double max = 0.0;
-    for (int i = 0; i < sqrt(A.size()); i++){
-        for (int j = 0; j < sqrt(A.size()); j++){
+    int n = A.n_rows;
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
             //Loops through only lower tri, which is ok coz symmetric:D
             if (i!=j && i<j){
                 if (fabs(A(i,j))>max){
                     max = fabs(A(i,j));
-                    k = i+1;
-                    l = j+1;
+                    k = i;
+                    l = j;
                 }
             }
                 

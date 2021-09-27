@@ -57,22 +57,22 @@ int main()
     double max = max_offdiag_symmetric(A,k,l);
     cout << "This is the max: " << max << endl;
 
-    for (int i = 0; i < 2; i++){
-        max = max_offdiag_symmetric(A,k,l);
-        rotation(A,R,k,l,N);
-        cout << "Rotation Matrix: " << endl << R << endl;
-        cout << "Endret Matrix: " << endl << A << endl;
-    }
-
-    // while ( (max > eps) && (double(iter) < maxiter)){
-    //     rotation(A,R,k,l,N);
+    // for (int i = 0; i < 2; i++){
     //     max = max_offdiag_symmetric(A,k,l);
+    //     rotation(A,R,k,l,N);
     //     cout << "Rotation Matrix: " << endl << R << endl;
     //     cout << "Endret Matrix: " << endl << A << endl;
-    //     cout << "max: " << max << endl;
-    //     iter++;
-    //     cout << "Interation: " << iter << endl;
     // }
+
+    while ( (max > eps) && (double(iter) < maxiter)){
+        rotation(A,R,k,l,N);
+        max = max_offdiag_symmetric(A,k,l);
+        cout << "Rotation Matrix: " << endl << R << endl;
+        cout << "Endret Matrix: " << endl << A << endl;
+        cout << "max: " << max << endl;
+        iter++;
+        cout << "Interation: " << iter << endl;
+    }
 
     // vec jaro_eigval;
     // mat jaro_eigvec;
