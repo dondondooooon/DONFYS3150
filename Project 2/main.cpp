@@ -5,15 +5,18 @@
 int main()
 {
     //Initiazlization
-    vec eigval;
-    mat eigvec; 
-    double N = 3;
-    int iter = 0;
+    vec arma_eigval;
+    mat arma_eigvec; 
+    vec jaro_eigval;
+    mat jaro_eigvec;
     int k,l = 0.0;
+    int iter = 0;
+    double N = 3;
     double eps = 1.0e-8;
     double maxiter = N*N*N;
-    vec lam = vec(N).fill(0.);
-    mat v = mat(N,N).fill(0.);
+    bool converged {false};
+    vec anl_eigval = vec(N).fill(0.);
+    mat anl_eigvec = mat(N,N).fill(0.);
     // Sets up R_1 = I matrix
     mat R = mat(N,N,fill::eye);
     // Sets up tridiagonal matrix A for size N
@@ -21,18 +24,19 @@ int main()
     // Finds the max off-diagonal element for A
     double max = max_offdiag_symmetric(A,k,l);
 
+
     // // Oppgave 3
     // // Armadillo Eigen-solver
-    //eig_sym(eigval,eigvec,A);
+    //eig_sym(arma_eigval,arma_eigvec,A);
     // // Analytisk Eigen-solver
-    // eigen(N,lam,v);
+    // analytisk_eigen(N,anl_eigval,anl_eigvec);
     // // Normalize
-    // v = normalise(v);
+    // anl_eigvec = normalise(anl_eigvec);
     // // cout << "This is the matrix: " << endl << A << endl;
-    // // cout << "Arma::Eigenvalues: " << endl << eigval << endl;
-    // // cout << "Arma::Eigenvectors: " << endl << eigvec << endl;
-    // // cout << "Analytical Eigenvalues: " << endl << lam << endl;
-    // // cout << "Normalized Analytical Eigenvectors: " << endl << v << endl;
+    // // cout << "Arma::Eigenvalues: " << endl << arma_eigval << endl;
+    // // cout << "Arma::Eigenvectors: " << endl << arma_eigvec << endl;
+    // // cout << "Analytical Eigenvalues: " << endl << anl_eigval << endl;
+    // // cout << "Normalized Analytical Eigenvectors: " << endl << anl_eigvec << endl;
     
 
     // //Oppgave 4
@@ -52,34 +56,18 @@ int main()
 
     //Oppgave 5
     cout << "Matrix før endring: " << endl << A << endl;
+
+    jacobi_eigen(A,R,N,k,l,max,eps,jaro_eigval,jaro_eigvec,
+    maxiter,iter,converged);
+
     cout << "This is the max: " << max << endl;
+    cout << "Iterations: " << iter << endl;
+    cout << "Egenvalues in diagonal " << endl << A << endl;
+    cout << "Rotation Matrix/Egenvectors: " << endl << R << endl;
 
-    // for (int i = 0; i < 2; i++){
-    //     max = max_offdiag_symmetric(A,k,l);
-    //     rotation(A,R,k,l,N);
-    //     cout << "Rotation Matrix: " << endl << R << endl;
-    //     cout << "Endret Matrix: " << endl << A << endl;
-    // }
+    //jaro_eigval =
+    //jaro_eigvec = 
 
-    while ( (max > eps) && (double(iter) < maxiter)){
-        rotation(A,R,k,l,N);
-        max = max_offdiag_symmetric(A,k,l);
-        cout << "Rotation Matrix: " << endl << R << endl;
-        cout << "Endret Matrix: " << endl << A << endl;
-        cout << "max: " << max << endl;
-        iter++;
-        cout << "Interation: " << iter << endl;
-    }
-
-    // vec jaro_eigval;
-    // mat jaro_eigvec;
-
-    // eig_sym(jaro_eigval,jaro_eigvec,A);
-    // cout << "The Eigen Values: " << endl;
-    // cout << eigval << endl;
-    // cout << "the eigen vector: " << endl;
-    // cout << eigvec << endl;
-    
     // Done
     return 0;
 }

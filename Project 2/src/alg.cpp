@@ -20,7 +20,7 @@ mat create_trimatsym(double N)
 }
 
 // Sets up the analytical eigen values and vectors
-void eigen(double& N, vec& lam, mat& v)
+void analytisk_eigen(double& N, vec& lam, mat& v)
 {
     double n = N+1;
     double h = 1/n;
@@ -100,3 +100,16 @@ void rotation(mat& A, mat& R, int k, int l, double N){
         R(i,l) = r_il*c + r_ik*s;
     }
 }
+
+// Solve Eigen values and vectors via Jacobi Rotation Method
+void jacobi_eigen(mat& A, mat& R, double N, int& k, int& l, double& max, double eps,
+vec& eigval, mat& eigenvec, const int maxiter, int& iter, bool& converged){
+
+    while ( (max > eps) && (double(iter) < maxiter)){
+        rotation(A,R,k,l,N);
+        cout << "max: " << max << endl;
+        max = max_offdiag_symmetric(A,k,l);
+        iter++;
+    }
+    //converged = !converged;
+ }
