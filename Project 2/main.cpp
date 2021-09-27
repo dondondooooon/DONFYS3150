@@ -11,7 +11,7 @@ int main()
     int iter = 0;
     double eps = 1.0e-8;
     bool converged {false};
-    double n = 10;
+    double n = 100;
     double N = n-1;
     double h = 1/n;
     double maxiter = N*N*N;
@@ -51,11 +51,8 @@ int main()
         cout << "We've converged enough :) (staaahp)" << endl;
     }
     
-    arma_eigvec.save("armavec.bin");
-    anl_eigvec.save("anlvec.bin");
+    
     jaro_eigvec.save("jarovec.bin");
-    arma_eigval.save("armaval.bin");
-    anl_eigval.save("anlval.bin");
     jaro_eigval.save("jaroval.bin");
 
     // //Oppgave 4

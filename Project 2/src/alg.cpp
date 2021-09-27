@@ -109,6 +109,6 @@ vec& eigval, mat& eigvec, const int maxiter, int& iter, bool& converged){
         eigval(i) = A(i,i);
     }
     eigval = sort(eigval);
-    eigvec = R;
+    eigvec = sort(R);
     converged = !converged;
  }
