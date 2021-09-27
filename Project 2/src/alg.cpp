@@ -112,32 +112,3 @@ vec& eigval, mat& eigvec, const int maxiter, int& iter, bool& converged){
     eigvec = R;
     converged = !converged;
  }
-
- void savefile(double N, mat A){
-    string filename = "armavec.txt";  
-    ofstream ofile;         //Create and open the output file 
-    ofile.open(filename);   //Connect it to filename
-    for (int j = 0; j < A.n_rows; j++){
-        for (int i = 0; i < A.n_rows; i++){
-            ofile << setw(10) << setprecision(3) << scientific << A(i,j);
-            ofile << "   ";
-            if (i == A.n_rows-1){
-                ofile << "\n";
-            }
-        }
-    }
-    ofile.close();
- }
-
-    // for (int p=0; p < 2; p++){
-    //     for (int o=0; o<3; o++){
-    //         string name[2]= {eigval,eigvec};
-    //         string title[3]= {arma,anl,jaro};
-    //         string filename = title(o) + "_" + name(p) + ".txt"; 
-    //         ofstream ofile;         //Create and open the output file 
-    //         ofile.open(filename);   //Connect it to filename
-
-    //         for (int i = 0; i < A.n_rows; i++){
-    //             for (int i = 0; i < A.n_rows; i++){
-    //                 ofile << setw(10) << setprecision(3) << scientific << eig;        
-    //     }
