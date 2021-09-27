@@ -28,7 +28,7 @@ void rotation(mat& A, mat& R, int k, int l, double N);
 
 // Jacobi Eigensolver
 void jacobi_eigen(mat& A, mat& R, double N, int& k, int& l, double& max, double eps,
-vec& eigval, mat& eigenvec, const int maxiter, int& iter, bool& converged);
+vec& eigval, mat& eigvec, const int maxiter, int& iter, bool& converged);
 
 
 #endif

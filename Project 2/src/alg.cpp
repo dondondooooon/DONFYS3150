@@ -37,9 +37,8 @@ void analytisk_eigen(double& N, vec& lam, mat& v)
 // Max. Off-Diagonal Alg.
 double max_offdiag_symmetric(const mat& A, int& k, int& l){
     double max = 0.0;
-    int n = A.n_rows;
-    for (int i = 0; i < n; i++){
-        for (int j = 0; j < n; j++){
+    for (int i = 0; i < A.n_rows; i++){
+        for (int j = 0; j < A.n_rows; j++){
             //Loops through only lower tri, which is ok coz symmetric:D
             if (i!=j && i<j){
                 if (fabs(A(i,j))>max){
@@ -103,13 +102,17 @@ void rotation(mat& A, mat& R, int k, int l, double N){
 
 // Solve Eigen values and vectors via Jacobi Rotation Method
 void jacobi_eigen(mat& A, mat& R, double N, int& k, int& l, double& max, double eps,
-vec& eigval, mat& eigenvec, const int maxiter, int& iter, bool& converged){
+vec& eigval, mat& eigvec, const int maxiter, int& iter, bool& converged){
 
     while ( (max > eps) && (double(iter) < maxiter)){
         rotation(A,R,k,l,N);
-        cout << "max: " << max << endl;
         max = max_offdiag_symmetric(A,k,l);
         iter++;
     }
-    //converged = !converged;
+    for (int i = 0; i < A.n_rows; i++){
+        eigval(i) = A(i,i);
+    }
+    eigval = sort(eigval);
+    eigvec = R;
+    converged = !converged;
  }
