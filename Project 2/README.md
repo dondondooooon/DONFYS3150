@@ -2,6 +2,7 @@ src/alg.cpp
 --------
 This is where the functions for the algorithms that are used in main.cpp are written.
 
+
 main.cpp
 --------
 A C++ program that performs all the neccesarry tasks in Project 2, i.e. finds the eigenvalues and eigenvectors for a given matrix of size N via 3 different methods:
@@ -20,6 +21,9 @@ plot.py
 This python script imports the binary files which contain the matrix for the eigenvectors and plots them with x.
 
 Run command: python3 plot.py
+
+
+
 
 figures
 --------
