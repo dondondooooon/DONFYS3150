@@ -11,8 +11,11 @@ int main()
     int iter = 0;
     double eps = 1.0e-8;
     bool converged {false};
-    double n = 100;
+    
+    // Change n-steps or N size matrix here
+    double n = 10; //3 4 6 100
     double N = n-1;
+
     double h = 1/n;
     double maxiter = N*N*N;
     vec anl_eigval = vec(N).fill(0.);
@@ -32,11 +35,12 @@ int main()
     // Analytisk Eigen-solver
     analytisk_eigen(N,anl_eigval,anl_eigvec);
     // Normalize
-    anl_eigvec = normalise(anl_eigvec);
+    anl_eigvec = sort(normalise(anl_eigvec));
     
 
     cout << "Original Matrix: " << endl << A << endl;
 
+    // Jacobi Eigen-solver
     jacobi_eigen(A,R,N,k,l,max,eps,jaro_eigval,jaro_eigvec,
     maxiter,iter,converged);
 
@@ -51,9 +55,8 @@ int main()
         cout << "We've converged enough :) (staaahp)" << endl;
     }
     
-    
+    anl_eigvec.save("anlvec.bin");
     jaro_eigvec.save("jarovec.bin");
-    jaro_eigval.save("jaroval.bin");
 
     // //Oppgave 4
     // //Test Matrix T
