@@ -12,10 +12,9 @@ public:
   double m_m; // Mass
   vec m_r; // Position
   vec m_v; // Velocity
-  int m_part; // i-th Particle
 
   // Constructor
-  Particle(double q_in, double m_in,vec r_in, vec v_in, int part_in);
+  Particle(double q_in, double m_in,vec r_in, vec v_in);
 
   // Info Method
   string info();

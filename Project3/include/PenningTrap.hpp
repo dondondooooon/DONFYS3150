@@ -12,6 +12,7 @@ public: // Public
   double m_B0;  // Magnetic Field Strength
   double m_V0;  // Applied Potential
   double m_d;   // Characteristic Dimension
+  double m_ke;  // Columbs Constant
   std::vector<Particle> m_all_p;  // All particles
 
   // Constructor
@@ -36,15 +37,14 @@ public: // Public
   vec force_particle(int i, int j);
 
   // The total force on particle_i from the other particles
-  vec total_force_particles(int i, double ke);
+  vec total_force_particles(int i);
 
-/*
   // The total force on particle_i from both external fields and other particles
-  total_force(int i);
+  vec total_force(int i);
 
   // Evolve the system one time step (dt) using Runge-Kutta 4th order
   void evolve_RK4(double dt);
-*/
+
   // Evolve the system one time step (dt) using Forward Euler
   void evolve_Euler_Cromer(double dt);
 

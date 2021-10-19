@@ -6,6 +6,7 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
   m_B0 = B0_in; // Magnetic Field Strength
   m_V0 = V0_in; // Applied Potential
   m_d = d_in; // Characteristic Dimension
+  m_ke = 1; // Columbs Constant
 }
 
   // Add a particle to the trap
@@ -17,7 +18,7 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
   void PenningTrap::add_n_particle(int n, double q_in, double m_in, vec r_in, vec v_in){
     for (int i=0; i < n; i++){
       // Create new Particle
-      Particle new_p(q_in, m_in, r_in, v_in, n);
+      Particle new_p(q_in, m_in, r_in, v_in);
 
       // Add to trap
       //m_all_p.push_back(new_p) // Remove the need for the prior method
@@ -56,32 +57,32 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
     vec diff = r-rj;
     double abso = sqrt(diff(0)*diff(0)+diff(1)*diff(1)+diff(2)*diff(2));
     double denominator = abso*abso*abso;
-    return( (diff) );
+    return( q*diff/denominator );
   }
 
   // The total force on particle_i from the other particles
-  vec PenningTrap::total_force_particles(int i, double ke){
+  vec PenningTrap::total_force_particles(int i){
     vec sum = vec({0,0,0});
     int siz = m_all_p.size();
-    for (int j=0; j<siz; i++){
+    for (int j=0; j<siz; j++){
       if (j != i){
         sum += force_particle(i,j);
       }
     }
-    return(ke*sum);
+    return(m_ke*sum);
   }
 
   // The total force on particle_i from both external fields and other particles
-  vec total_force(int i, double ke){
-    return(total_force_external(i)+total_force_particles(i,ke));
+  vec PenningTrap::total_force(int i){
+    return(total_force_external(i)+total_force_particles(i));
   }
 
-  // Evolve the system one time step (dt) using Forward Euler
-  void evolve_Euler_Cromer(double dt){
-    int i = 0;
-    Particle::m_v = Particle::m_v + dt*total_force_external(i);
-    Particle::m_r = Particle::m_r + dt*Particle::m_v;
-  }
+  // // Evolve the system one time step (dt) using Forward Euler
+  // void evolve_Euler_Cromer(double dt){
+  //   int i = 0;
+  //   Particle::m_v = Particle::m_v + dt*total_force_external(i);
+  //   Particle::m_r = Particle::m_r + dt*Particle::m_v;
+  // }
 
 //////////
 
