@@ -6,7 +6,7 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
   m_B0 = B0_in; // Magnetic Field Strength
   m_V0 = V0_in; // Applied Potential
   m_d = d_in; // Characteristic Dimension
-  m_ke = 1; // Columbs Constant
+  m_ke = 1.38935333*pow(10,5); // Columbs Constant
 }
 
   // Add a particle to the trap
@@ -45,8 +45,8 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
   // The total force on particle_i from the external fields
   vec PenningTrap::total_force_external(int i){
     return(m_all_p[i].m_q*
-    (external_E_field(m_all_p[i].m_r)+external_B_field(m_all_p[i].m_v))
-    );
+    (external_E_field(m_all_p[i].m_r)+
+    external_B_field(m_all_p[i].m_v)) );
   }
 
   // Force on particle_i from particle_j
@@ -57,7 +57,7 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
     vec diff = r-rj;
     double abso = sqrt(diff(0)*diff(0)+diff(1)*diff(1)+diff(2)*diff(2));
     double denominator = abso*abso*abso;
-    return( q*diff/denominator );
+    return q*(diff/denominator);
   }
 
   // The total force on particle_i from the other particles
@@ -69,7 +69,7 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
         sum += force_particle(i,j);
       }
     }
-    return(m_ke*sum);
+    return m_ke*sum;
   }
 
   // The total force on particle_i from both external fields and other particles
@@ -77,26 +77,32 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
     return(total_force_external(i)+total_force_particles(i));
   }
 
-  // // Evolve the system one time step (dt) using Forward Euler
-  // void evolve_Euler_Cromer(double dt){
-  //   int i = 0;
-  //   Particle::m_v = Particle::m_v + dt*total_force_external(i);
-  //   Particle::m_r = Particle::m_r + dt*Particle::m_v;
-  // }
-
-//////////
-
-
-
-
-
-
-/*
-
-
-  
-
   // Evolve the system one time step (dt) using Runge-Kutta 4th order
-   void evolve_RK4(double dt);
- */
+  void PenningTrap::evolve_RK4(double dt){
+    double m = m_all_p[0].m_m;
+
+    vec v_k1 = dt * total_force(0)/m;
+    vec r_k1 = dt * v_k1;
+
+    vec v_k2 = dt * (total_force(0)/m + 0.5*v_k1);
+    vec r_k2 = dt * (v_k2 + 0.5*r_k1);
+
+    vec v_k3 = dt * (total_force(0)/m + 0.5*v_k2);
+    vec r_k3 = dt * (v_k3 + 0.5*r_k2);
+
+    vec v_k4 = dt * (total_force(0)/m + v_k3);
+    vec r_k4 = dt * (v_k3 + r_k3);
+
+    m_all_p[0].m_v += (1/6)*
+    (v_k1+2*v_k2+2*v_k3+v_k4);
+
+    m_all_p[0].m_r += (1/6)*
+    (r_k1+2*r_k2+2*r_k3+r_k4);  
+  }
+
+  // Evolve the system one time step (dt) using Forward Euler
+  void PenningTrap::evolve_Euler_Cromer(double dt){
+    m_all_p[0].m_v = m_all_p[0].m_v + dt*(total_force(0)/m_all_p[0].m_m);
+    m_all_p[0].m_r = m_all_p[0].m_r + dt*m_all_p[0].m_v;
+  }
 

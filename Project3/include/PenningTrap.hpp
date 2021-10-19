@@ -2,9 +2,6 @@
 #define __PenningTrap_hpp__
 
 #include <Particle.hpp>
-#include <armadillo>
-using namespace arma;
-using namespace std;
 
 class PenningTrap
 {
@@ -45,7 +42,7 @@ public: // Public
   // Evolve the system one time step (dt) using Runge-Kutta 4th order
   void evolve_RK4(double dt);
 
-  // Evolve the system one time step (dt) using Forward Euler
+  // Evolve the system one time step (dt) using Euler-Cromer
   void evolve_Euler_Cromer(double dt);
 
 };
