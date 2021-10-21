@@ -73,36 +73,73 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
   }
 
   // The total force on particle_i from both external fields and other particles
-  vec PenningTrap::total_force(int i){
-    return(total_force_external(i)+total_force_particles(i));
+  vec PenningTrap::total_force(int i, int l){
+    if (l == 0){  // Without particle interaction
+      return(total_force_external(i));
+    }
+    else { // With particle interaction
+      return(total_force_external(i)+total_force_particles(i));
+    }
   }
 
   // Evolve the system one time step (dt) using Runge-Kutta 4th order
-  void PenningTrap::evolve_RK4(double dt){
-    double m = m_all_p[0].m_m;
-
-    vec v_k1 = dt * total_force(0)/m;
-    vec r_k1 = dt * v_k1;
-
-    vec v_k2 = dt * (total_force(0)/m + 0.5*v_k1);
-    vec r_k2 = dt * (v_k2 + 0.5*r_k1);
-
-    vec v_k3 = dt * (total_force(0)/m + 0.5*v_k2);
-    vec r_k3 = dt * (v_k3 + 0.5*r_k2);
-
-    vec v_k4 = dt * (total_force(0)/m + v_k3);
-    vec r_k4 = dt * (v_k3 + r_k3);
-
-    m_all_p[0].m_v += (1/6)*
-    (v_k1+2*v_k2+2*v_k3+v_k4);
-
-    m_all_p[0].m_r += (1/6)*
-    (r_k1+2*r_k2+2*r_k3+r_k4);  
+  void PenningTrap::evolve_RK4(double dt, int l, int j){
+    double m = m_all_p[j].m_m;
+    vec v_old = m_all_p[j].m_v; // Save orig v
+    vec r_old = m_all_p[j].m_r; // Save orig r
+    //k1
+    vec acc = total_force(j,l)/m; // acc = Acceleration (N2L)
+    vec v_k1 = dt * acc;
+    vec r_k1 = dt * v_old;
+    //k2
+    m_all_p[j].m_v = v_old + v_k1/2;
+    m_all_p[j].m_r = r_old + r_k1/2;
+    acc = total_force(j,l)/m; // Calc. acc for new v & r
+    vec v_k2 = dt * acc;
+    vec r_k2 = dt * m_all_p[j].m_v;
+    //k3
+    m_all_p[j].m_v = v_old + v_k2/2;
+    m_all_p[j].m_r = r_old + r_k2/2;
+    acc = total_force(j,l)/m; // Calc. acc for new v & r
+    vec v_k3 = dt * acc;
+    vec r_k3 = dt * m_all_p[j].m_v;
+    //k4
+    m_all_p[j].m_v = v_old + v_k3;
+    m_all_p[j].m_r = r_old + r_k3;
+    acc = total_force(j,l)/m; // Calc. acc for new v & r
+    vec v_k4 = dt * acc;
+    vec r_k4 = dt * m_all_p[j].m_v;
+    // Combine
+    m_all_p[j].m_v += (1/6)*
+    (v_k1+2*v_k2+2*v_k3+v_k4);  // Endelig hastighet
+    m_all_p[j].m_r += (1/6)*
+    (r_k1+2*r_k2+2*r_k3+r_k4);  // Endelig posisjon 
   }
 
   // Evolve the system one time step (dt) using Forward Euler
-  void PenningTrap::evolve_Euler_Cromer(double dt){
-    m_all_p[0].m_v = m_all_p[0].m_v + dt*(total_force(0)/m_all_p[0].m_m);
-    m_all_p[0].m_r = m_all_p[0].m_r + dt*m_all_p[0].m_v;
+  void PenningTrap::evolve_Euler_Cromer(double dt, int l){
+    m_all_p[0].m_v += dt*(total_force(0,l)/m_all_p[0].m_m);
+    m_all_p[0].m_r += dt*m_all_p[0].m_v;
   }
 
+  void PenningTrap::full_evolution(mat& r, double dt, double n,
+  int l, int j){ // mat v
+    for (int i=0;i<n-1;i++){
+        evolve_RK4(dt,l,j);
+        r.row(i+1) = m_all_p[j].m_r.st();
+        // v.row(i+1) = Trap.m_all_p[j].m_v.st();
+    }
+  }
+
+  //void PenningTrap::
+
+  // void export_binary(int end, double dt, double n, int l){
+  //   mat r = mat(n,3).fill(0.); // Position vector
+  //   mat v = mat(n,3).fill(0.); // Velocity vector
+  //   for (i=0; i < end; i++){
+  //     full_evolution(r,v,dt,n,l);
+  //     // if(condition){} // if particle still trapped
+  //     r.save("Rpos" + to_string(i) + ".bin");
+  //     v.save("Vhas" + to_string(i) + ".bin");
+  //   }
+  // }

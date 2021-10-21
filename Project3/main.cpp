@@ -4,48 +4,49 @@
 
 int main()
 {
+    // Trap & Particle Initialization
     double T = 9.64852558*10;
     double V = 9.64852558*pow(10,7);
     double e = 1.602176634*pow(10,-19);
-    double cap_mass = 40.078;
-
+    double Ca_p_mass = 40.078;
+    // Set Penning Trap
     PenningTrap Trap(1*T,10*V,10000);
+    // Add Particle/s
+    Trap.add_n_particle(1,4,Ca_p_mass,{1,0,1},{0,1,0});
+    Trap.add_n_particle(1,4,Ca_p_mass,{-1,0,-1},{0,1,0});
+    int p_size = Trap.m_all_p.size(); // Number of particles in our trap
 
-    Trap.add_n_particle(1,1,cap_mass,{1,0,1},{0,1,0});
-    //Trap.add_n_particle(1,3,6,{1,2,0},{0,0,0});
+    // Simulation Setup
+    int l = 1; // Particle interaction; 0 = off
+    double N = 100; // End Time in microseconds
+    double dt = 0.01; // Stepsize
+    double n = N/dt; // Points
+    vec t = vec(n).fill(0.); // Time vector
+    mat r = mat(n,3).fill(0.); // Position vector
+    // mat v = mat(n,3).fill(0.); // Velocity vector
 
-    // cout << Trap.m_all_p[0].info() << endl;
-    // vec r = Trap.m_all_p[0].m_r;
-    // vec v = Trap.m_all_p[0].m_v;
-    // cout << "Efield:\n" << Trap.external_E_field(r) << endl;
-    // cout << "Bfield:\n" << Trap.external_B_field(r) << endl;
-    // cout << "Net_External:\n" << Trap.total_force_external(0) << endl;
-    // cout << "Net_Particle_Force:\n" << Trap.total_force_particles(0) << endl;
-    // cout << "Netto Force:\n" << Trap.total_force(0) << endl;
-    
-    double N = 100;
-    vec t = linspace(0,N,100);
-    double dt = t(1)-t(0);  // Since evenly spaced, timestep is constant
-    mat r = mat(N,3).fill(0.);
-    mat v = mat(N,3).fill(0.);
+    for (int i=0; i<p_size; i++){
+        // Start Condition
+        r.row(0) = Trap.m_all_p[i].m_r.st(); 
+        // v.row(i) = Trap.m_all_p[i].m_v.st();
 
-    for (int i=0;i<N;i++){
-        r.row(i) = Trap.m_all_p[0].m_r.st();
-        v.row(i) = Trap.m_all_p[0].m_v.st();
-        Trap.evolve_RK4(dt);
+        Trap.full_evolution(r,dt,n,l,i);
+        r.save("Rpos" + to_string(i) + ".bin"); // Save position vectors
+        // v.save("Vhas" + to_string{i} + ".bin"); // Save velocity vectors
     }
 
-    // EulerCromer Check?
-    /*
-    for (int i=0; i<N; i++){
-        r.row(i) = Trap.m_all_p[0].m_r.st();
-        v.row(i) = Trap.m_all_p[0].m_v.st();
-        Trap.evolve_Euler_Cromer(dt);
-    }
-    */
+    // // EulerCromer Check?
+    // for (int i=0; i<n-1; i++){
+    //     Trap.evolve_Euler_Cromer(dt,l);
+    //     v.row(i+1) = Trap.m_all_p[0].m_v.st();
+    //     r.row(i+1) = Trap.m_all_p[0].m_r.st();
+    //     t(i+1) = t(i) + dt;
+    // }
    
-    r.save("Rpos_RK4.bin");
-    v.save("Vhas_RK4.bin");
+    // Save Matrix to binary files
+    // r.save("Rpos.bin"); // EC
+    // v.save("Vhas.bin"); // EC
+    // t.save("tid.bin");  // EC
 
     cout << "Hello World!" << endl;
     // Done

@@ -37,13 +37,17 @@ public: // Public
   vec total_force_particles(int i);
 
   // The total force on particle_i from both external fields and other particles
-  vec total_force(int i);
+  vec total_force(int i, int l);
 
   // Evolve the system one time step (dt) using Runge-Kutta 4th order
-  void evolve_RK4(double dt);
+  void evolve_RK4(double dt, int l, int j);
 
   // Evolve the system one time step (dt) using Euler-Cromer
-  void evolve_Euler_Cromer(double dt);
+  void evolve_Euler_Cromer(double dt, int l);
+
+  // Full Evolution of the system using Runge-Kutta 4th order
+  void full_evolution(mat& r, double dt,
+  double n, int l, int j);
 
 };
 
