@@ -16,6 +16,8 @@ int main()
     Trap.add_n_particle(1,4,Ca_p_mass,{-1,0,-1},{0,1,0});
     int p_size = Trap.m_all_p.size(); // Number of particles in our trap
 
+    cout << "This: " << typeid(Trap.m_all_p).name() << endl;
+
     // Simulation Setup
     int l = 1; // Particle interaction; 0 = off
     double N = 100; // End Time in microseconds
@@ -25,9 +27,22 @@ int main()
     mat r = mat(n,3).fill(0.); // Position vector
     // mat v = mat(n,3).fill(0.); // Velocity vector
 
+    // std::vector<Particle> startsys; // Original state of system
+    // vec r0;
+    // vec v0;
+
     for (int i=0; i<p_size; i++){
         // Start Condition
-        r.row(0) = Trap.m_all_p[i].m_r.st(); 
+        // if (i = 0){
+        //     r0 = Trap.m_all_p[i].m_r;
+        //     v0 = Trap.m_all_p[i].m_v;
+        // }
+        // else{
+        //     Trap.m_all_p[i].m_r = r0;
+        //     Trap.m_all_p[i].m_v = v0;
+        // }
+        // r.row(0) = r0.st(); 
+        r.row(i) = Trap.m_all_p[i].m_r.st();
         // v.row(i) = Trap.m_all_p[i].m_v.st();
 
         Trap.full_evolution(r,dt,n,l,i);
