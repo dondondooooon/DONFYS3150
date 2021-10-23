@@ -1,48 +1,119 @@
-#include <iostream>
+#include<iostream>
 #include<armadillo>
-
+#include <cmath>
+using namespace arma;
 using namespace std;
 
 int main()
 {
-    double Nnew = 10;
-    for (int i = Nnew-1; i>0 ; i--){         
-        cout << i << endl;     
-    }
-     
+    double x = 1/6;
+    cout << x << endl;
+
  return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
-arma::vec x = arma::linspace(1,20,10); // Creates an evenly linearly spaced vector with N elements
-    double x_i = x(4); // Extracts a specific index in a vector
-    cout<< x;
-    cout<< x_i << endl;
-    cout<< x.size() << endl;
+class Particle 
+{
+public:
+  double m_q; // Charge
+  double m_m; // Mass
+  vec m_r; // Position
+  vec m_v; // Velocity
+  cube m_cr; // Cube_Position
+  cube m_cv; // Cube_Velocity
 
-    double s = 0;
-    for (int i = 0; i <= 5; i++) {
-    s += i;
-    }
-    cout << s << endl << endl;
+  // Constructor 1
+  Particle(double q_in, double m_in,vec r_in, vec v_in);
 
-    cout << exp(1) << endl;
+  // Constructor 2
+  Particle(int p_size_in, int n_in);
+};
 
-    arma::mat A = arma::mat(10,2);
-    A.col(1) = x;
-    cout << A << endl;
+class PenningTrap
+{
+public: // Public 
+  double m_B0;  // Magnetic Field Strength
+  double m_V0;  // Applied Potential
+  double m_d;   // Characteristic Dimension
+  double m_ke;  // Columbs Constant
+  vector<Particle> m_all_p;  // All particles
 
-    x = 0
-    cout << 1-(1-exp(-10))*x-exp(-10*x);
-*/
+  // Constructor
+  PenningTrap(double B0_in, double V0_in, double d_in);
 
-/*
-//arma::vec xn 
+  void blank();
 
-//arma::vec y = arma::vec(xn.size()); // creates an empty vector with the same size as x vector
+int main()
+{
+    Particle poop(1,1,{1,1,1},{0,2,0});
+    cout << poop.m_r << endl;
+    cout << poop.m_cv << endl;
 
-//arma::mat A = arma::mat(100,2);
-    //A.col(0) = xn;
-    //A.col(1) = y;
-    // cout << A << endl; // check print
+ return 0;
+}
+
+// Constructor 1
+Particle::Particle(double q_in, double m_in, vec r_in, vec v_in){
+  m_q = q_in; // Charge
+  m_m = m_in; // Mass
+  m_r = r_in; // Position
+  m_v = v_in; // Velocity
+}
+
+// Constructor 2
+Particle::Particle(int p_size_in, int n_in){
+    m_cv = cube(3,p_size_in,n_in);  // Cube for velocity
+    m_cr = cube(3,p_size_in,n_in); // Cube for position
+}
+
+// Constructor Definition
+PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
+  m_B0 = B0_in; // Magnetic Field Strength
+  m_V0 = V0_in; // Applied Potential
+  m_d = d_in; // Characteristic Dimension
+  m_ke = 1.38935333*pow(10,5); // Columbs Constant
+}
+
+void PenningTrap::blank(){
+    Particle coob(2,10);
+}
 */

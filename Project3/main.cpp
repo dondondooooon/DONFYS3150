@@ -17,7 +17,7 @@ int main()
     int p_size = Trap.m_all_p.size(); // Number of particles in our trap
 
     // Simulation Setup
-    int l = 1; // Particle interaction; 0 = off
+    int l = 0; // Particle interaction; 0 = off
     double N = 100; // End Time in microseconds
     double dt = 0.01; // Stepsize
     double n = N/dt; // Points

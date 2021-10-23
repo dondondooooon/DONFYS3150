@@ -110,10 +110,8 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
     vec v_k4 = dt * acc;
     vec r_k4 = dt * m_all_p[j].m_v;
     // Combine
-    m_all_p[j].m_v += (1/6)*
-    (v_k1+2*v_k2+2*v_k3+v_k4);  // Endelig hastighet
-    m_all_p[j].m_r += (1/6)*
-    (r_k1+2*r_k2+2*r_k3+r_k4);  // Endelig posisjon 
+    m_all_p[j].m_v = v_old+(v_k1+2*v_k2+2*v_k3+v_k4)/6;  // Endelig hastighet
+    m_all_p[j].m_r = r_old+(r_k1+2*r_k2+2*r_k3+r_k4)/6;  // Endelig posisjon 
   }
 
   // Evolve the system one time step (dt) using Forward Euler

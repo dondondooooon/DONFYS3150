@@ -7,29 +7,26 @@ style = ["-","--"]
 colz = ["green","orange"]
 dotcolz = ['blue','red','yellow','pink']
 
-for i in range(2):
-    r.load(f"Rpos{i}.bin")
-    plt.plot(r[:,0],r[:,1],style[i],color=colz[i],label=f'Particle {i}')
-    nr = np.array(r)
-    if i==1:
-        dotcolz.append(dotcolz.pop(0))
-    plt.plot(nr[0,0],nr[0,1],'o',color=dotcolz[i],label=f'Start{i}')
-    plt.plot(nr[-1,0],nr[-1,1],'o',color=dotcolz[i+1],label=f'End{i}')
+r.load("Rpos0.bin")
+plt.plot(r[:,0],r[:,1],label='Particle 1')
+
+# for i in range(2):
+#     r.load(f"Rpos{i}.bin")
+#     plt.plot(r[:,0],r[:,1],style[i],color=colz[i],label=f'Particle {i}')
+#     nr = np.array(r)
+#     if i==1:
+#         dotcolz.append(dotcolz.pop(0))
+#     plt.plot(nr[0,0],nr[0,1],'o',color=dotcolz[i],label=f'Start{i}')
+#     plt.plot(nr[-1,0],nr[-1,1],'o',color=dotcolz[i+1],label=f'End{i}')
 
 plt.xlabel("X")
 plt.ylabel("Y")
-plt.title("XY-Plane w/ Coloumb Interaction")
+plt.title("XY-Plane w/o Coloumb Interaction")
 plt.legend(loc='upper right')
-plt.savefig("2p_XY_plane_ke.pdf")
+#plt.savefig("2p_XY_plane_ke.pdf")
 plt.show()
 
-# def f(x):
-#     return((np.log(np.cos(x)))/(x**2))
-# t = np.linspace(-np.pi/2,np.pi/2,100)
-
-# plt.plot(t,f(t))
-# plt.show()
-
+print(r)
 
 # Time vs. Z-direction
 """
