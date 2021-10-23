@@ -15,9 +15,7 @@ int main()
     Trap.add_n_particle(1,4,Ca_p_mass,{1,0,1},{0,1,0});
     Trap.add_n_particle(1,4,Ca_p_mass,{-1,0,-1},{0,1,0});
     int p_size = Trap.m_all_p.size(); // Number of particles in our trap
-
-    cout << "This: " << typeid(Trap.m_all_p).name() << endl;
-
+//test
     // Simulation Setup
     int l = 1; // Particle interaction; 0 = off
     double N = 100; // End Time in microseconds
