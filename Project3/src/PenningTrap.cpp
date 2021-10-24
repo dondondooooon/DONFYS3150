@@ -129,13 +129,13 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
     }
   }
 
-  void PenningTrap::export_binary(int p_tot_size, double dt, double n, int l){
-    for (i=0; i < p_tot_size; i++){
-    mat r = mat(n,3).fill(0.); // Position vector
-    mat v = mat(n,3).fill(0.); // Velocity vector
-      full_evolution(r,v,dt,n,l,i);
-      // if(condition){} // if particle still trapped
-      r.save("Rpos" + to_string(i) + ".bin");
-      v.save("Vhas" + to_string(i) + ".bin");
-    }
-  }
+  // void PenningTrap::export_binary(int p_tot_size, double dt, double n, int l){
+  //   for (i=0; i < p_tot_size; i++){
+  //   mat r = mat(n,3).fill(0.); // Position vector
+  //   mat v = mat(n,3).fill(0.); // Velocity vector
+  //     full_evolution(r,v,dt,n,l,i);
+  //     // if(condition){} // if particle still trapped
+  //     r.save("Rpos" + to_string(i) + ".bin");
+  //     v.save("Vhas" + to_string(i) + ".bin");
+  //   }
+  // }

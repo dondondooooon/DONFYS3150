@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 r = pa.mat()
-style = ["-","--"]
-colz = ["green","orange"]
-dotcolz = ['blue','red','yellow','pink']
+# style = ["-","--"]
+# colz = ["green","orange"]
+# dotcolz = ['blue','red','yellow','pink']
 
 r.load("Rpos0.bin")
 plt.plot(r[:,0],r[:,1],label='Particle 1')

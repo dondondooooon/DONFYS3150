@@ -12,8 +12,8 @@ int main()
     // Set Penning Trap
     PenningTrap Trap(1*T,10*V,10000);
     // Add Particle/s
-    Trap.add_n_particle(1,4,Ca_p_mass,{1,0,1},{0,1,0});
-    Trap.add_n_particle(1,4,Ca_p_mass,{-1,0,-1},{0,1,0});
+    Trap.add_n_particle(1,1,Ca_p_mass,{1,0,1},{0,1,0});
+    // Trap.add_n_particle(1,4,Ca_p_mass,{-1,0,-1},{0,1,0});
     int p_size = Trap.m_all_p.size(); // Number of particles in our trap
 //test
     // Simulation Setup
