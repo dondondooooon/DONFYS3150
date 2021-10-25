@@ -130,7 +130,7 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
       V_.slice(0).col(j) = m_all_p[j].m_v;
       R_.slice(0).col(j) = m_all_p[j].m_r;
     }
-    for (int i=1;i<n-1;i++){
+    for (int i=1;i<n;i++){
       for (int j=0;j<psiz;j++){
           evolve_RK4(dt,l,i,j);
           //r.col(i+1) = m_all_p[j].m_r;
