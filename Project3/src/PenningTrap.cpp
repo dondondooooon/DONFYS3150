@@ -83,10 +83,10 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
   }
 
   // Evolve the system one time step (dt) using Runge-Kutta 4th order
-  void PenningTrap::evolve_RK4(double dt, int l, int j){
+  void PenningTrap::evolve_RK4(double dt, int l, int i, int j){
     double m = m_all_p[j].m_m;
-    vec v_old = m_all_p[j].m_v; // Save orig v
-    vec r_old = m_all_p[j].m_r; // Save orig r
+    vec v_old = V_.slice(i-1).col(j); // Save orig v
+    vec r_old = R_.slice(i-1).col(j); // Save orig r
     //k1
     vec acc = total_force(j,l)/m; // acc = Acceleration (N2L)
     vec v_k1 = dt * acc;
@@ -110,8 +110,11 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
     vec v_k4 = dt * acc;
     vec r_k4 = dt * m_all_p[j].m_v;
     // Combine
-    m_all_p[j].m_v = v_old+(v_k1+2*v_k2+2*v_k3+v_k4)/6;  // Endelig hastighet
-    m_all_p[j].m_r = r_old+(r_k1+2*r_k2+2*r_k3+r_k4)/6;  // Endelig posisjon 
+    V_.slice(i).col(j) = v_old+(v_k1+2*v_k2+2*v_k3+v_k4)/6;  // Endelig hastighet
+    R_.slice(i).col(j) = r_old+(r_k1+2*r_k2+2*r_k3+r_k4)/6;  // Endelig posisjon
+    // Reset for next particle
+    m_all_p[j].m_v = v_old;
+    m_all_p[j].m_r = r_old;
   }
 
   // Evolve the system one time step (dt) using Forward Euler
@@ -120,12 +123,18 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in){
     m_all_p[0].m_r += dt*m_all_p[0].m_v;
   }
 
-  void PenningTrap::full_evolution(mat& r, double dt, double n,
-  int l, int j){ // mat v
-    for (int i=0;i<n-1;i++){
-        evolve_RK4(dt,l,j);
-        r.row(i+1) = m_all_p[j].m_r.st();
-        // v.row(i+1) = Trap.m_all_p[j].m_v.st();
+  void PenningTrap::full_evolution(double dt, double n, int psiz, int l){
+    V_ = cube(3,psiz,n).fill(0.);
+    R_ = cube(3,psiz,n).fill(0.);
+    for (int j=0;j<psiz;j++){
+      V_.slice(0).col(j) = m_all_p[j].m_v;
+      R_.slice(0).col(j) = m_all_p[j].m_r;
+    }
+    for (int i=1;i<n-1;i++){
+      for (int j=0;j<psiz;j++){
+          evolve_RK4(dt,l,i,j);
+          //r.col(i+1) = m_all_p[j].m_r;
+      }
     }
   }
 

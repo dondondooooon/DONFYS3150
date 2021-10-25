@@ -13,7 +13,7 @@ int main()
     PenningTrap Trap(1*T,10*V,10000);
     // Add Particle/s
     Trap.add_n_particle(1,1,Ca_p_mass,{1,0,1},{0,1,0});
-    // Trap.add_n_particle(1,4,Ca_p_mass,{-1,0,-1},{0,1,0});
+    Trap.add_n_particle(1,1,Ca_p_mass,{-1,0,-1},{0,1,0});
     int p_size = Trap.m_all_p.size(); // Number of particles in our trap
 //test
     // Simulation Setup
@@ -22,31 +22,34 @@ int main()
     double dt = 0.01; // Stepsize
     double n = N/dt; // Points
     vec t = vec(n).fill(0.); // Time vector
-    mat r = mat(n,3).fill(0.); // Position vector
+    mat r = mat(3,n).fill(0.); // Position vector
     // mat v = mat(n,3).fill(0.); // Velocity vector
 
-    // std::vector<Particle> startsys; // Original state of system
-    // vec r0;
-    // vec v0;
-
-    for (int i=0; i<p_size; i++){
-        // Start Condition
-        // if (i = 0){
-        //     r0 = Trap.m_all_p[i].m_r;
-        //     v0 = Trap.m_all_p[i].m_v;
-        // }
-        // else{
-        //     Trap.m_all_p[i].m_r = r0;
-        //     Trap.m_all_p[i].m_v = v0;
-        // }
-        // r.row(0) = r0.st(); 
-        r.row(i) = Trap.m_all_p[i].m_r.st();
-        // v.row(i) = Trap.m_all_p[i].m_v.st();
-
-        Trap.full_evolution(r,dt,n,l,i);
-        r.save("Rpos" + to_string(i) + ".bin"); // Save position vectors
-        // v.save("Vhas" + to_string{i} + ".bin"); // Save velocity vectors
+    Trap.full_evolution(dt,n,p_size,l);
+    //cout << Trap.R_ << endl;
+    for (int j=0;j<p_size;j++){
+        r = Trap.R_.col(j);
+        r.save("Rpos" + to_string(j) + ".bin");
     }
+    
+    // for (int i=0; i<p_size; i++){
+    //     // Start Condition
+    //     // if (i = 0){
+    //     //     r0 = Trap.m_all_p[i].m_r;
+    //     //     v0 = Trap.m_all_p[i].m_v;
+    //     // }
+    //     // else{
+    //     //     Trap.m_all_p[i].m_r = r0;
+    //     //     Trap.m_all_p[i].m_v = v0;
+    //     // }
+    //     // r.row(0) = r0.st(); 
+    //     r.col(i) = Trap.m_all_p[i].m_r;
+    //     // v.row(i) = Trap.m_all_p[i].m_v.st();
+
+    //     Trap.full_evolution(r,dt,n,l,i);
+    //     r.save("Rpos" + to_string(i) + ".bin"); // Save position vectors
+    //     // v.save("Vhas" + to_string{i} + ".bin"); // Save velocity vectors
+    // }
 
     // // EulerCromer Check?
     // for (int i=0; i<n-1; i++){
