@@ -19,11 +19,11 @@ import numpy as np
 #         r.load(f"Rpos{i}.bin")
 #         v.load(f"Vvel{i}.bin")
 #         plt.plot(r[j,:],v[j,:],color=kolor[i],label=partikol[i])
-#     plt.title(titolo[j])
+#     # plt.title(titolo[j])
 #     plt.xlabel(x[j])
 #     plt.ylabel(y[j])
 #     plt.legend(loc='upper right')
-#     plt.savefig(f"plot{j+4}.pdf") # or +7 for with interaction
+#     # plt.savefig(f"PS_ke_{j+4}.pdf") # or +7 for with interaction
 #     plt.show()
 ###################
 # # 2 Particles with and without Coloumb Interactions
@@ -43,11 +43,11 @@ import numpy as np
 #     plt.plot(nr[0,0],nr[1,0],'o',color=dotcolz[i],label=f'Start{i}')
 #     plt.plot(nr[0,-1],nr[1,-1],'o',color=dotcolz[i+1],label=f'End{i}')
 
-# plt.xlabel("X")
-# plt.ylabel("Y")
-# plt.title("XY-Plane with Coloumb Interaction")
+# plt.xlabel(r"$r_x$ [$\mu$m]")
+# plt.ylabel(r"$r_y$  [$\mu$m]")
+# # plt.title("XY-Plane with Coloumb Interaction")
 # plt.legend(loc='upper right')
-# #plt.savefig("2p_XY_plane_ke.pdf")
+# # plt.savefig("2p_XY_plane_ke.pdf")
 # plt.show()
 ###################
 # # Time vs. Z-direction
@@ -58,8 +58,8 @@ import numpy as np
 # r.load("Rpos0.bin")  # RK4
 # # Plot
 # plt.plot(t,r[2,:])
-# plt.xlabel(r"Time [$\mu$s]")
-# plt.ylabel(r"$z$-direction [$\mu$m]")
-# plt.title(r"Time vs. Position in $z$-direction")
+# plt.xlabel(r"$t$ [$\mu$s]")
+# plt.ylabel(r"$r_z$ [$\mu$m]")
+# # plt.title(r"Time vs. Position in $z$-direction")
 # plt.savefig("Time_vs_Z_direction.pdf")
 # plt.show()
