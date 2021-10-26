@@ -12,7 +12,7 @@ plot.py
 --------
 This python script imports the binary files which contain the matrices for the position and vector of the particle/s and produces different plots:
 	
-      1. z position vs. time of 1 particle
+    1. z position vs. time of 1 particle
 	
 	2. xy-plane for 2 particles with and without coloumb interaction
 
