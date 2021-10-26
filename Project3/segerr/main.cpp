@@ -14,12 +14,14 @@ int main()
     double T = 9.64852558*10; // Tesla unit
     double V = 9.64852558*pow(10,7); // electric potential unit
     double Ca_p_mass = 40.078; // mass for Ca+ ion
-    double d = 10000.0*1.0; // characteristic dimenion
+    double d = 10000.0*0.05; // characteristic dimenion
+    double f = 0.01; // 0.4 // 0.7
+    double wz = 0.2; // (0.2,2.5)
     // Set Penning Trap
-    PenningTrap Trap(1*T,10*V,d,false);
+    PenningTrap Trap(1*T,10*V,10000,false, f, wz, n);
     // Add Particle/s
     Trap.add_n_particle(1,1,Ca_p_mass,{1,0,1},{0,1,0});
-    Trap.add_n_particle(1,1,Ca_p_mass,{-1,1,-1},{0,1,0});
+    // Trap.add_n_particle(1,1,Ca_p_mass,{-1,1,-1},{0,1,0});
     // Number of particles in our trap test
     int p_size = Trap.m_all_p.size(); 
     // Run simulation

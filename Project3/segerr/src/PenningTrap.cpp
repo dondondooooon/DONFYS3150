@@ -2,12 +2,15 @@
 #include "Particle.hpp"
 
 // Constructor Definition
-PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in, bool colm_in){
+PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in, bool colm_in, double f_in, double wv_in, double n){
   m_B0 = B0_in; // Magnetic Field Strength
   m_V0 = V0_in; // Applied Potential
   m_d = d_in; // Characteristic Dimension
   m_ke = 1.38935333*pow(10,5); // Columbs Constant
   m_colm = colm_in; // Particle Interaction; on or off: true or false
+  m_f = f_in;   // Contant amplitude
+  m_wv = wv_in; // Angluar Frequency
+  vec m_t = linspace(0,100,n); // time vector
 }
 
   // Add a particle to the trap
@@ -28,23 +31,35 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in, bool colm_in){
   }
 
   // External electric field at point r=(x,y,z)
-  vec PenningTrap::external_E_field(vec r){
+  vec PenningTrap::external_E_field(vec r, double t){
     r(0) = r(0)*-2;
     r(1) = r(1)*-2;
     r(2) = r(2)*4;
-    return (-(m_V0/(2*m_d*m_d))*r);
+    // return (-(m_V0/(2*m_d*m_d))*r);
+    if (norm(r)>m_d){
+      return r*0.0;
+    }
+    else{
+      double v0 = m_V0*(1+m_f*cos(m_wv*t));
+      return (-(v0/(2*m_d*m_d))*r);
+    }
   }
 
   // External magnetic field at point r=(x,y,z)
-  vec PenningTrap::external_B_field(vec v){
-  vec B = vec({0,0,m_B0});
-  return(cross(v,B));
+  vec PenningTrap::external_B_field(vec v, vec r){
+  if (norm(r)>m_d){
+    return r*0.0;
+    }
+  else{
+    vec B = vec({0,0,m_B0});
+    return(cross(v,B));
+    }
   }
 
   // The total force on particle_i from the external fields
-  vec PenningTrap::total_force_external(int i){
-    return m_all_p[i].m_q*external_E_field(m_all_p[i].m_r)+
-    external_B_field(m_all_p[i].m_q*m_all_p[i].m_v);
+  vec PenningTrap::total_force_external(int i, double t){
+    return m_all_p[i].m_q*external_E_field(m_all_p[i].m_r,t)+
+    external_B_field(m_all_p[i].m_q*m_all_p[i].m_v,m_all_p[i].m_r);
   }
 
   // Force on particle_i from particle_j
@@ -70,12 +85,12 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in, bool colm_in){
   }
 
   // The total force on particle_i from both external fields and other particles
-  vec PenningTrap::total_force(int i){
+  vec PenningTrap::total_force(int i, double t){
     if (m_colm == false){  // Without particle interaction
-      return(total_force_external(i));
+      return(total_force_external(i,t));
     }
     else { // With particle interaction
-      return(total_force_external(i)+total_force_particles(i));
+      return(total_force_external(i,t)+total_force_particles(i));
     }
   }
 
@@ -86,25 +101,25 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in, bool colm_in){
     vec r_old = R_.slice(i-1).col(j); // Save orig r
     // Integration:
     //k1
-    vec acc = total_force(j)/m; // acc = Acceleration (N2L)
+    vec acc = total_force(j,m_t[i-1])/m; // acc = Acceleration (N2L)
     vec v_k1 = dt * acc;
     vec r_k1 = dt * v_old;
     //k2
     m_all_p[j].m_v = v_old + v_k1/2;
     m_all_p[j].m_r = r_old + r_k1/2;
-    acc = total_force(j)/m; // Calc. acc for new v & r
+    acc = total_force(j,m_t[i-1]+dt/2)/m; // Calc. acc for new v & r
     vec v_k2 = dt * acc;
     vec r_k2 = dt * m_all_p[j].m_v;
     //k3
     m_all_p[j].m_v = v_old + v_k2/2;
     m_all_p[j].m_r = r_old + r_k2/2;
-    acc = total_force(j)/m; // Calc. acc for new v & r
+    acc = total_force(j,m_t[i-1]+dt/2)/m; // Calc. acc for new v & r
     vec v_k3 = dt * acc;
     vec r_k3 = dt * m_all_p[j].m_v;
     //k4
     m_all_p[j].m_v = v_old + v_k3;
     m_all_p[j].m_r = r_old + r_k3;
-    acc = total_force(j)/m; // Calc. acc for new v & r
+    acc = total_force(j,m_t[i])/m; // Calc. acc for new v & r
     vec v_k4 = dt * acc;
     vec r_k4 = dt * m_all_p[j].m_v;
     // Combine
@@ -115,19 +130,19 @@ PenningTrap::PenningTrap(double B0_in, double V0_in, double d_in, bool colm_in){
     m_all_p[j].m_r = r_old;
   }
 
-  // Evolve the system one time step (dt) using Forward Euler
-  void PenningTrap::evolve_Euler_Cromer(double dt, int i, int j){
-    double m = m_all_p[j].m_m; // mass
-    vec v_old = V_.slice(i-1).col(j); // Save orig v
-    vec r_old = R_.slice(i-1).col(j); // Save orig r
-    // Integration
-    vec acc = total_force(j)/m;
-    V_.slice(i).col(j) = v_old + dt*acc;
-    R_.slice(i).col(j) = r_old + dt*V_.slice(i).col(j);
-    // Reset for next particle
-    m_all_p[j].m_v = v_old;
-    m_all_p[j].m_r = r_old;
-  }
+  // // Evolve the system one time step (dt) using Forward Euler
+  // void PenningTrap::evolve_Euler_Cromer(double dt, int i, int j){
+  //   double m = m_all_p[j].m_m; // mass
+  //   vec v_old = V_.slice(i-1).col(j); // Save orig v
+  //   vec r_old = R_.slice(i-1).col(j); // Save orig r
+  //   // Integration
+  //   vec acc = total_force(j)/m;
+  //   V_.slice(i).col(j) = v_old + dt*acc;
+  //   R_.slice(i).col(j) = r_old + dt*V_.slice(i).col(j);
+  //   // Reset for next particle
+  //   m_all_p[j].m_v = v_old;
+  //   m_all_p[j].m_r = r_old;
+  // }
 
   // Full Evolution of our simulation
   void PenningTrap::full_evolution(double dt, double n, int psiz){
