@@ -11,12 +11,14 @@ public: // Public
   double m_d;   // Characteristic Dimension
   double m_ke;  // Columbs Constant
   std::vector<Particle> m_all_p;  // All particles
+  int m_psize;  // Number of Particles
+  bool m_colm;  // Coloumb Interaction
   // Cube Matrices for Integration
   cube R_;
   cube V_;
 
   // Constructor
-  PenningTrap(double B0_in, double V0_in, double d_in);
+  PenningTrap(double B0_in, double V0_in, double d_in, bool colm_in);
   
   // Add a particle to the trap
   void add_particle(Particle p_in);
@@ -40,16 +42,16 @@ public: // Public
   vec total_force_particles(int i);
 
   // The total force on particle_i from both external fields and other particles
-  vec total_force(int i, int l);
+  vec total_force(int i);
 
   // Evolve the system one time step (dt) using Runge-Kutta 4th order
-  void evolve_RK4(double dt, int l, int i, int j);
+  void evolve_RK4(double dt, int i, int j);
 
   // Evolve the system one time step (dt) using Euler-Cromer
-  void evolve_Euler_Cromer(double dt, int l);
+  void evolve_Euler_Cromer(double dt, int i, int j);
 
   // Full Evolution of the system using Runge-Kutta 4th order
-  void full_evolution(double dt, double n, int psiz, int l);
+  void full_evolution(double dt, double n, int psiz);
 
 };
 
