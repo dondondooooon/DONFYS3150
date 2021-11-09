@@ -4,15 +4,19 @@
 using namespace arma;
 using namespace std;
 
+double p(int E);
+
 int main()
 {
-    double x = 1/6;
-    cout << x << endl;
+    int E = ;
 
  return 0;
 }
 
-
+double p(int E){
+  double Z = 12 + 2*exp(8) + exp(-8);
+  return((1/Z)*exp(E));
+}
 
 
 
