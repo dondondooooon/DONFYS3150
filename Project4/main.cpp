@@ -42,9 +42,9 @@ int main(){
         }
 
         E_sum += gitter.E(gitter.S_);
-        E_avg += E_sum / i;
-        
     }
+
+    E_avg += E_sum / n_samples;
 
     cout << "Hello World!" << endl;
     // Done

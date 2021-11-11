@@ -6,7 +6,8 @@ Lattice::Lattice(double N_in, double T_in){
     Snew_ = mat(N_in,N_in);
     L_ = N_in;
     beta_ = 1./(kb*T_in);
-    Ediff = exp(Ediff);
+    Ediff_ = vec({8.*J_, 4.*J_, 0., -4.*J_, -8.*J_})
+    Ediff_ = exp(-beta_*Ediff);
 }
 
 // Generate a Random Spin Configuration For Initial Spin Configuration

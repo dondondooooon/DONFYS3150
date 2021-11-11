@@ -16,7 +16,7 @@ public:
  double beta_; // Inverse Temperature
  int i_flip;
  int j_flip;
- vec Ediff = vec({8.*J_, 4.*J_, 0., -4.*J_, -8.*J_});
+ vec Ediff_;
  vector<mat> all_S; // All Spin Configuration
 
  // Constructor 
