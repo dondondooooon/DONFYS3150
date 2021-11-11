@@ -11,28 +11,43 @@ public:
  mat S_; // Spin Configuration
  mat Snew_; // Proposed New Spin Configuration
  int L_;  // Length of Spin Configuration
+ int J_ = 1; // Association Energy
  int kb = 1; // Boltzmann Constant
  double beta_; // Inverse Temperature
- double Z_;    // Partition Value
+ int i_flip;
+ int j_flip;
+ vec Ediff = vec({8.*J_, 4.*J_, 0., -4.*J_, -8.*J_});
  vector<mat> all_S; // All Spin Configuration
 
  // Constructor 
- Lattice(double N);
+ Lattice(double N_in, double T_in);
 
-  // Generate a Random Spin Configuration
-  mat S_gen();
+ // Generate a Random Spin Configuration
+ mat S_gen();
+ 
+ // RNG spin flip
+ void S_rng();
 
  // Periodic Boundary Condition
  int Periodic(int i, int L);
 
- // Calculate Total Energy in a Spin Configuration
+ // Energy Around A Spin
+ int E_spin(mat S, int i, int j);
+
+ // Energy Difference
+ int delta_E(int i, int j);
+
+ // Probability Ratio for Energy Shift of 1 Spin Change
+ double p(int dE);
+
+ // Calculate Total Energy For A Given Spin Configuration
  int E(mat S);
 
 //  // Partition Function Calculation
 //  void Z();
 
- // Probability Function for a given state S
- double Lattice::p(mat S);
+//  // Probability Function for a given state S
+//  double p(mat S);
 
 
 

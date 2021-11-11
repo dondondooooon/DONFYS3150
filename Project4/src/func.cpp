@@ -3,19 +3,20 @@
 // Constructor Definition
 Lattice::Lattice(double N_in, double T_in){
     S_ = mat(N_in,N_in);
-    Snew_ = = mat(N_in,N_in);
+    Snew_ = mat(N_in,N_in);
     L_ = N_in;
     beta_ = 1./(kb*T_in);
+    Ediff = exp(Ediff);
 }
 
-// Generate a Random Spin Configuration
+// Generate a Random Spin Configuration For Initial Spin Configuration
 mat Lattice::S_gen(){
     int randNum;
-    int A(L_,L_);
+    mat A = mat(L_,L_).fill(0.);
     srand(time(NULL)); // Seed Generate
     for (int i = 0;i< L_; i++){
         for(int j = 0;j< L_; j++){
-            int randNum = rand() % 2;
+            randNum = rand() % 2;
             if(randNum == 0){
                 randNum = -1;
             }
@@ -25,13 +26,57 @@ mat Lattice::S_gen(){
     return A;
 }
 
+// RNG Spin Flip
+void Lattice::S_rng(){
+    Snew_ = S_;
+    srand(time(NULL)); // Seed Generate
+    i_flip = rand() % L_;
+    j_flip = rand() % L_;
+    Snew_(i_flip,j_flip) = Snew_(i_flip,j_flip) * -1; // Flip that spin
+}
+
 // Periodic Boundary Condition
 int Lattice::Periodic(int i, int L){
     int correct_index = (i+L) % L;
     return correct_index;
 }
 
-// Calculate Total Energy in a given Spin Configuration
+// Energy Around A Spin
+int Lattice::E_spin(mat S, int i, int j){
+    int spin = S(i,j);
+    int up = spin * S(Periodic(i-1,L_),Periodic(j,L_));
+    int down = spin * S(Periodic(i+1,L_),Periodic(j,L_));
+    int left = spin * S(Periodic(i,L_),Periodic(j-1,L_));
+    int right = spin * S(Periodic(i,L_),Periodic(j+1,L_));
+    return up+down+left+right;
+}
+
+// Energy Difference
+int Lattice::delta_E(int i, int j){
+    int E_before = E_spin(S_, i_flip, j_flip);
+    int E_after = E_spin(Snew_, i_flip, j_flip);
+    return E_after-E_before;
+}
+
+// Probability Ratio for Energy Shift of 1 Spin Change
+double Lattice::p(int dE){
+    int E_index = 2;
+    if (dE == 8){
+        E_index = 0;
+    }
+    if (dE == 4){
+        E_index = 1;
+    }
+    if (dE == -4){
+        E_index = 3;
+    }
+    if (dE == -8){
+        E_index = 4;
+    }
+    return Ediff[E_index];
+}
+
+// Calculate Total Energy For A Given Spin Configuration
 int Lattice::E(mat S){
     int E = 0;
     int L = sqrt(S.size());
@@ -43,7 +88,7 @@ int Lattice::E(mat S){
             E += up + right;
         }
     }
-    return E;
+    return -J_*E;
 }
 
 // // Calculate Total Energy of all possible states
@@ -66,10 +111,10 @@ int Lattice::E(mat S){
 //     Z_ = Z_all;
 // }
 
-// Probability Function for a given state S
-double Lattice::p(mat S){
-    return ( (1/Z_)*exp(beta_*E(S)) );
-}
+// // Probability Function for a given state S
+// double Lattice::p(mat S){
+//     return ( (1/Z_)*exp(beta_*E(S)) );
+// }
 
 
 
