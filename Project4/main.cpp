@@ -3,24 +3,28 @@
 
 int main(){
     int N = 2;
-    Lattice gitter(N);
+    int T = 1;
+    Lattice gitter(N,T);
+    gitter.S_ = gitter.S_gen();
+    int n_samples = 100;
 
-    // int ss;
-    // int epsilon = 0;
+    // gitter.S2_all();
+    // int nsize = gitter.all_S.size();
 
-    gitter.S2_all();
-    int nsize = gitter.all_S.size();
+    // for (int i=0; i<nsize; i++){
+    //     cout << "This" + to_string(i) + ":" << endl << gitter.all_S[i] << endl;
+    // }
 
-    for (int i=0; i<nsize; i++){
-        cout << "This" + to_string(i) + ":" << endl << gitter.all_S[i] << endl;
+    // // int tall = gitter.E_all();
+    // // cout << "THIS IS THE NUMBER: " << tall << endl;
+    
+    int E_sum = 0;
+    int E_avg = 0;
+
+    for (int i=1; i<n_samples+1; i++){
+        propose new s 
+        
     }
-
-    cout << "THIS!: " << endl << gitter.all_S[nsize-1] << endl;
-
-    int tall = gitter.E_all();
-
-
-    cout << "THIS IS THE NUMBER: " << tall << endl;
 
     cout << "Hello World!" << endl;
     // Done
