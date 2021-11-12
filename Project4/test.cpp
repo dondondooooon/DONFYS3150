@@ -13,8 +13,8 @@ int main(){
     // }
 
     srand(time(NULL));
-    for (int i=0; i<10; i++){
-        cout << "This: " << rand() % L << endl;
+    for (int i=0; i<10; i+=4){
+        cout << "This: " << i << endl << "LOL: " << rand() % L << endl;
     }
 
     return 0;

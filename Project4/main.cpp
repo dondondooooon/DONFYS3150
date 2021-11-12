@@ -3,48 +3,21 @@
 
 int main(){
     int N = 2;
-    int T = 1;
-    Lattice gitter(N,T);
-    gitter.S_ = gitter.S_gen();
     int n_samples = 100;
+    int cycles = 1000;
+    int T = 1;
+    Lattice gitter(N,T,n_samples,cycles);
+    gitter.S_ = gitter.S_gen();
 
-    // CHECK IF I FLIP 1 SPIN
-    // cout << "This: " << endl << gitter.S_ << endl;
-    // cout << "This: " << endl << gitter.Snew_ << endl;
-    // gitter.S_rng();
-    // cout << "This: " << endl << gitter.Snew_ << endl;
+    gitter.MCMC(cycles);
 
-    // gitter.S2_all();
-    // int nsize = gitter.all_S.size();
-    // for (int i=0; i<nsize; i++){
-    //     cout << "This" + to_string(i) + ":" << endl << gitter.all_S[i] << endl;
-    // }
-    // // int tall = gitter.E_all();
-    // // cout << "THIS IS THE NUMBER: " << tall << endl;
-    
-    int E_old;
-    int E_new;
-    int E_sum = 0;
-    int E_avg = 0;
+    cout << "This is E_average: " << gitter.Eavg_ << endl;
+    cout << "This is M_avgerage: " << gitter.Mavg_ << endl;
+    cout << "This is E^2 avg: " << gitter.E2_ << endl;
+    cout << "This is M^2 avg: " << gitter.M2_ << endl;
 
-    for (int i=1; i<n_samples+1; i++){
-        E_old = gitter.E(gitter.S_);
-        gitter.S_rng();
-        int ii = gitter.i_flip;
-        int jj = gitter.j_flip;
-        E_new = gitter.E(gitter.Snew_);
-
-        double accept = gitter.p(gitter.delta_E(ii,jj));
-        int r = randu();
-
-        if (r < accept){
-            gitter.S_ = gitter.Snew_;
-        }
-
-        E_sum += gitter.E(gitter.S_);
-    }
-
-    E_avg += E_sum / n_samples;
+    cout << "This is the heat capacity: " << gitter.cv_ << endl;
+    cout << "This is the mag. suscp.: " << gitter.chi_ << endl;
 
     cout << "Hello World!" << endl;
     // Done
