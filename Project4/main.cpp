@@ -3,10 +3,10 @@
 
 int main(){
     int L = 2;
-    int samples = 5000;
-    int cycles = 100;
+    int samples = 1000;
+    int cycles = 1000;
     double T = 1.0;
-    vec Tvec = linspace(0.8,2.0,500);
+    vec Tvec = linspace(0.5,2.0,100);
     Ising ising(L,T,samples,cycles,Tvec);
     ising.mc_temp();
     ising.print();

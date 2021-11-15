@@ -182,19 +182,15 @@ int Ising::M(mat S){
  // Temperature Monte Carlo plots
  void Ising::mc_temp(){
     start_config();
-    for (int i=0; i<tsize_; i++){
-        beta_ = bvec_(i);
-        monte_carlo();
-        filesave(i);
-    }
- }
- // Export
- void Ising::filesave(int i){
     ofstream ofile;
     ofile.open("ThingsVsTemp.txt");
     int width = 12;
     int prec  = 4;
-    ofile << setw(width) << setprecision(prec) << scientific << Tvec_(i)
+    for (int i=0; i<tsize_; i++){
+        beta_ = bvec_(i);
+        monte_carlo();
+        // filesave(i);
+        ofile << setw(width) << setprecision(prec) << scientific << Tvec_(i)
           << setw(width) << setprecision(prec) << scientific << Eavg
           << setw(width) << setprecision(prec) << scientific << Mavg
         //  << setw(width) << setprecision(prec) << scientific << E2_
@@ -202,8 +198,24 @@ int Ising::M(mat S){
         //  << setw(width) << setprecision(prec) << scientific << cv_
         //  << setw(width) << setprecision(prec) << scientific << chi_
           << endl;
+    }
     ofile.close();
  }
+//  // Export
+//  void Ising::filesave(int i){
+//     ofstream ofile;
+//     ofile.open("ThingsVsTemp.txt");
+//     int width = 12;
+//     int prec  = 4;
+//     ofile << setw(width) << setprecision(prec) << scientific << Tvec_(i)
+//           << setw(width) << setprecision(prec) << scientific << Eavg
+//           << setw(width) << setprecision(prec) << scientific << Mavg
+//         //  << setw(width) << setprecision(prec) << scientific << E2_
+//         //  << setw(width) << setprecision(prec) << scientific << M2_
+//         //  << setw(width) << setprecision(prec) << scientific << cv_
+//         //  << setw(width) << setprecision(prec) << scientific << chi_
+//           << endl;
+//  }
  // Printout values
  void Ising::print(){
     cout << "This is E_average: " << Eavg << endl;
