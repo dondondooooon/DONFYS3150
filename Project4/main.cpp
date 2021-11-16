@@ -4,12 +4,13 @@
 int main(){
     int L = 2;
     int samples = 1000;
-    int cycles = 1000;
+    int cycles = 10000;
     double T = 1.0;
-    vec Tvec = linspace(0.5,2.0,100);
-    Ising ising(L,T,samples,cycles,Tvec);
+    vec Tvec = linspace(0.5,4.5,100);
+    Ising ising(L,Tvec,cycles);
+    //ising.monte_carlo();
     ising.mc_temp();
-    ising.print();
+    //ising.print();
 
     // cout << "This is E_average: " << gitter.Eavg_ << endl;
     // cout << "This is M_avgerage: " << gitter.Mavg_ << endl;
@@ -23,3 +24,4 @@ int main(){
     // Done
     return 0;
 }
+

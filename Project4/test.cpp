@@ -5,37 +5,19 @@ using namespace arma;
 using namespace std;
 
 int main(){
+    int L_ = 5;
+    int i_flip; int j_flip;
 
-    // int L = 6;
-    // for (int i=0; i<10; i++){
-    //     // srand(time(NULL)); // Seed Generate
-    //     int x = arma::randu() * L;
-    //     cout << "This: " << x << endl;
-    // }
+    random_device rando;
+	mt19937_64 generate(rando());
+	uniform_real_distribution<double> distribution(0.0, 1.0);
+	
+    for (int i=0; i<1000; i++){
+        i_flip = distribution(generate) * L_;
+	    j_flip = distribution(generate) * L_;
 
-    // srand(time(NULL));
-    // for (int i=0; i<10; i+=4){
-    //     cout << "This: " << i << endl << "LOL: " << rand() % L << endl;
-    // }
-
-    const double range_from  = 0.;
-    const double range_to    = 1.;//000000000000000;
-    std::random_device                  rand_dev;
-    std::mt19937                        generator(rand_dev());
-    std::uniform_int_distribution<double>  distr(range_from, range_to);
-
-    for (int i=0; i<20; i++){
-        std::cout << distr(generator) << '\n';
-        //double x = distr(generator) / 1000000000000000.;
-        //cout << "This: " << x << endl;
+        cout << "I: " << i_flip << " and J: " << j_flip << endl;
     }
-
-    // const int s = 31;
-    // mt19937_64 mtrand(s);
-    // for (int i=0; i<20; i++){
-    //     cout << mtrand() << endl;
-    // }
-
-
+    
     return 0;
 }

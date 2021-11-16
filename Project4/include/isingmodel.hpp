@@ -24,38 +24,23 @@ private:
 
 
 public:
- int L_;  // Length of Spin Configuration
- mat S_; // Spin Configuration
- double T_; // Temperature
- double beta_; // Inverse Temperature
- int samples_; // Samples For MCMC
- int mc_cycles_; // Number of MCMC cycles
- double divide_;
-
- int tsize_;
- vec Tvec_;
- vec bvec_;
- double E_sqrsum;
- double M_sqrsum;
-
  double kb = 1.; // Boltzmann Constant
  int J_ = 1; // Association Energy Constant
+ int L_;  // Length of Spin Configuration
+ mat S_; // Spin Configuration
+ vec Tvec_; // Temperature Vector
+ int tsize_;
+ double beta_; // Inverse Temperature
+ vec bvec_; // Inverse Temperature Vector
+ int mc_cycles_; // Number of MCMC cycles
+ double norm_; // Normalizing Factor For Averages
  vec boltz_ = vec(17).fill(0.);  // Delta Energy Values
  int i_flip; // Row Flip Index
  int j_flip; // Column Flip Index
-
  
-//  vec e ;
-//  vec m ;
-//  vec e2;
-//  vec m2;
-//  vec c ;
-//  vec x ;
-//  vec Tvec_;
- vec mcvec_; // Vector For MCMC Cycles
 
  // Constructor 
- Ising(int L_in, double T_in, int samples_in, int cycles_in, vec Tvec_in);
+ Ising(int L_in, vec Tvec_in, int cycles_in);
 
  // Delta Energy Values
  void dE_values();
@@ -78,8 +63,8 @@ public:
  // Probability Ratio for Energy Shift of 1 Spin Change
  double p(int dE);
 
- // 1 Spin Change
- void flip();
+//  // 1 Spin Change
+//  void flip();
 
  // Calculate Total Energy For A Given Spin Configuration
  int E(mat S);
