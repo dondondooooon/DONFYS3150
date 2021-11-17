@@ -11,22 +11,21 @@ class Ising
 private:
  double E_;
  double M_;
- double E_sum;
- double M_sum;
  double Eavg; // Mean Energy
  double Mavg; // Mean Magnetization
- double E_sqr; 
- double M_sqr;
- double E2_; // Mean Energy^2
- double M2_; // Mean Magnetization^2
- double cv_;
- double chi_;
+ double E2_; 
+ double M2_; 
+ double Esqrd; // Mean Energy^2
+ double Msqrd; // Mean Magnetization^2
+ double cv_; // Heat Capacity
+ double chi_; // Magnetic Suceptibility
 
 
 public:
  double kb = 1.; // Boltzmann Constant
  int J_ = 1; // Association Energy Constant
  int L_;  // Length of Spin Configuration
+ int N_; // Number of Spins
  mat S_; // Spin Configuration
  vec Tvec_; // Temperature Vector
  int tsize_;
@@ -37,7 +36,14 @@ public:
  vec boltz_ = vec(17).fill(0.);  // Delta Energy Values
  int i_flip; // Row Flip Index
  int j_flip; // Column Flip Index
- 
+ double invN_; 
+
+ // Seed Generate
+ random_device rando;
+ mt19937_64 generate;
+
+ uniform_real_distribution<double> distribution_double;
+ uniform_int_distribution<int> distribution_int;
 
  // Constructor 
  Ising(int L_in, vec Tvec_in, int cycles_in);
@@ -51,11 +57,8 @@ public:
  // Periodic Boundary Condition
  int Periodic(int i, int L);
 
- // Energy Around The Original Spin
- int E_spin_orig(int i, int j);
-
- // Energy Around The Flipped Spin
- int E_spin_flip(int i, int j);
+ // Energy Around The Chosen Spin
+ int E_spin(int i, int j);
 
  // Energy Difference
  int dE(int i, int j);
