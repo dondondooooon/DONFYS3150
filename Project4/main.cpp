@@ -7,8 +7,8 @@ int main(){
     vec Tvec = linspace(0.5,4.5,100);
     Ising ising(L,Tvec,cycles);
     //ising.monte_carlo();
-    ising.mc_temp();
-    //ising.print();
+    ising.printT1();
+    //ising.mc_temp();
 
     cout << "Hello World!" << endl;
     // Done

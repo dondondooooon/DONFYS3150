@@ -13,7 +13,7 @@ Ising::Ising(int L_in, vec Tvec_in, int cycles_in) : generate(rando()) { // Init
     mc_cycles_ = cycles_in;
     invN_ = 1./N_;
     norm_ = 1.0/(mc_cycles_*N_*N_);
-    invmc_ = 1.0/mc_cycles
+    invmc = 1.0/mc_cycles_;
     Tvec_ = Tvec_in;
     tsize_ = Tvec_.size();
     bvec_ = vec(tsize_);
@@ -101,11 +101,11 @@ double Ising::p(int dE){
 }
  // Specific Heat Capacity
  double Ising::Cv(){
-    return beta_*beta_*(Esqrd-Eavg*Eavg);
+    return beta_*beta_*N_*(Esqrd-N_*Eavg*Eavg);
  }
  // Magnetic Susceptibility
  double Ising::Chi(){
-    return beta_*(Msqrd-Mavg*Mavg);
+    return beta_*N_*(Msqrd-N_*Mavg*Mavg);
  }
 
  //*******// Markov Chain Monte Carlo: Metropolis //*******//
@@ -146,32 +146,42 @@ double Ising::p(int dE){
     // MC CYCLES LOOP
     for (int k=0; k<mc_cycles_; k++){
         // 1 MC CYCLE SAMPLING 
-        for (int i=0; i<L_; i++){ 
-            for(int j=0; j<L_; j++){
-                metropolis();
-                Eavg += E_;
-                //cout << E_ << endl; 
-                Mavg += fabs(M_);
-                Esqrd += E2_;
-                Msqrd += M2_;
-                // cv_ += Cv();
-                // chi_ += Chi();
-            }
+        for (int i=0; i<N_; i++){ 
+            metropolis();
+            Eavg += E_;
+            //cout << E_ << endl; 
+            Mavg += fabs(M_);
+            Esqrd += E2_;
+            Msqrd += M2_;
+            // cv_ += Cv();
+            // chi_ += Chi();
         }
     }
     Eavg *= norm_;
     Mavg *= norm_;
-    Esqrd *= ;
+    Esqrd *= norm_;
     Msqrd *= norm_;
     cv_ = Cv();
     chi_ = Chi();
     // cv_ *= norm_*norm_;
     // chi_ *= norm_*norm_;
  }
+ // Printout for T = 1
+ void Ising::printT1(){
+    // T = 1
+    beta_ = 1.0/(kb*1.0);
+    dE_values();
+    monte_carlo();
+    cout << "Number of Monte Carlo Cycles: " << mc_cycles_ << endl;
+    cout << "Energy per Spin: " << Eavg << endl;
+    cout << "Magnetization per Spin: " << Mavg << endl;
+    cout << "The Heat Capacity: " << cv_ << endl;
+    cout << "The Magnetic Suscpeptibility: " << chi_ << endl;
+ }
  // Temperature Monte Carlo plots
  void Ising::mc_temp(){
     ofstream ofile;
-    ofile.open("ThingsVsTemp2.txt");
+    ofile.open("TempPlot" + to_string(mc_cycles_) + ".txt");
     int width = 23; 
     int prec  = 9;
     for (int i=0; i<tsize_; i++){
@@ -189,21 +199,30 @@ double Ising::p(int dE){
     }
     ofile.close();
  }
-//  // Export
-//  void Ising::filesave(int i){
-//     ofstream ofile;
-//     ofile.open("ThingsVsTemp.txt");
-//     int width = 12;
-//     int prec  = 4;
-//     ofile << setw(width) << setprecision(prec) << scientific << Tvec_(i)
-//           << setw(width) << setprecision(prec) << scientific << Eavg
-//           << setw(width) << setprecision(prec) << scientific << Mavg
-//         //  << setw(width) << setprecision(prec) << scientific << E2_
-//         //  << setw(width) << setprecision(prec) << scientific << M2_
-//         //  << setw(width) << setprecision(prec) << scientific << cv_
-//         //  << setw(width) << setprecision(prec) << scientific << chi_
-//           << endl;
-//  }
+ /////
+ void Ising::printcycles(){
+    mcmc_cycles(beta1_,1);
+    mcmc_cycles(beta2_,2);
+ }
+
+void Ising::mcmc_cycles(double beta, int h){
+    ofstream ofile;
+    ofile.open("MCcycle_beta" + to_string(h) + ".txt");
+    int width = 23; 
+    int prec  = 9;
+    beta_ = beta;
+    dE_values();
+    for (int i=0; i<mccycles_.size(); i++){
+        mc_cycles_ = mccycles_[i];
+        monte_carlo();
+        ofile << setw(width) << setprecision(prec) << scientific << mc_cycles_(i)
+          << setw(width) << setprecision(prec) << scientific << Eavg
+          << setw(width) << setprecision(prec) << scientific << Mavg
+          << endl;
+    }
+    ofile.close();
+ }
+ ////
  // Printout values
  void Ising::print(){
     cout << "This is E_average: " << Eavg << endl;

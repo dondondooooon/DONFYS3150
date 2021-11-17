@@ -23,6 +23,7 @@ private:
 
 public:
  double kb = 1.; // Boltzmann Constant
+ double invmc;
  int J_ = 1; // Association Energy Constant
  int L_;  // Length of Spin Configuration
  int N_; // Number of Spins
@@ -87,11 +88,11 @@ public:
  // Monte Carlo
  void monte_carlo();
 
+ // Printout for T = 1
+ void printT1();
+
  // Temperature Monte Carlo plots
  void mc_temp();
-
- // Export
- void filesave(int i);
 
  // Print out
  void print();
