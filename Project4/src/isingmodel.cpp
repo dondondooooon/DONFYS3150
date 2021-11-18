@@ -7,12 +7,11 @@ Ising::Ising(int L_in, vec Tvec_in, int cycles_in) : generate(rando()) { // Init
     start_config();
     E_ = E(S_);
     M_ = M(S_);
-    cout << "init m: " << M_ << endl;
     E2_ = E_*E_;
     M2_ = M_*M_;
     mc_cycles_ = cycles_in;
     invN_ = 1./N_;
-    norm_ = 1.0/(mc_cycles_*N_*N_);
+    cnorm_ = 1.0/(mc_cycles_);
     invmc = 1.0/mc_cycles_;
     Tvec_ = Tvec_in;
     tsize_ = Tvec_.size();
@@ -60,7 +59,6 @@ int Ising::E(mat S){
             E += up + right;
         }
     }
-    cout << E << endl;
     return -J_*E;
 }
 
@@ -85,9 +83,8 @@ int Ising::E_spin(int i, int j){
 }
 // Energy Difference
 int Ising::dE(int i, int j){
-    int E_after = E_spin(i_flip, j_flip);
-    //cout << "This: " << -2*E_after << endl; !! mistake was here what
-    return 2*E_after;
+    int de = E_spin(i_flip, j_flip);
+    return 2*de;
 }
 // Delta Energy Values
 void Ising::dE_values(){
@@ -126,19 +123,11 @@ double Ising::p(int dE){
         S_(i_flip,j_flip) *= -1.0;
         E_ += diff;
         M_ += 2.0*S_(i_flip,j_flip);
-        // M_ = fabs(M_);
-    
-        E2_ += E_*E_;
-        M2_ += M_*M_;
     }
     else if(r <= accept){
         S_(i_flip,j_flip) *= -1.0;
         E_ += diff;
         M_ += 2.0*S_(i_flip,j_flip);
-        // M_ = fabs(M_);
-    
-        E2_ += E_*E_;
-        M2_ += M_*M_;
     }
  }
  // Monte Carlo
@@ -148,23 +137,20 @@ double Ising::p(int dE){
         // 1 MC CYCLE SAMPLING 
         for (int i=0; i<N_; i++){ 
             metropolis();
-            Eavg += E_;
-            //cout << E_ << endl; 
-            Mavg += fabs(M_);
-            Esqrd += E2_;
-            Msqrd += M2_;
-            // cv_ += Cv();
-            // chi_ += Chi();
+            // Eavg += E_;
+            // Mavg += fabs(M_);
+            // Esqrd += E2_;
+            // Msqrd += M2_;
         }
+        Eavg += E_;
+        Mavg += fabs(M_);
+        Esqrd += E_*E_;
+        Msqrd += M_*M_;
     }
-    Eavg *= norm_;
-    Mavg *= norm_;
-    Esqrd *= norm_;
-    Msqrd *= norm_;
-    cv_ = Cv();
-    chi_ = Chi();
-    // cv_ *= norm_*norm_;
-    // chi_ *= norm_*norm_;
+    Eavg *= cnorm_;
+    Mavg *= cnorm_;
+    Esqrd *= cnorm_;
+    Msqrd *= cnorm_;
  }
  // Printout for T = 1
  void Ising::printT1(){
@@ -191,37 +177,35 @@ double Ising::p(int dE){
         ofile << setw(width) << setprecision(prec) << scientific << Tvec_(i)
           << setw(width) << setprecision(prec) << scientific << Eavg
           << setw(width) << setprecision(prec) << scientific << Mavg
-        //  << setw(width) << setprecision(prec) << scientific << Esqrd
-        //  << setw(width) << setprecision(prec) << scientific << Msqrd
-         << setw(width) << setprecision(prec) << scientific << cv_
-         << setw(width) << setprecision(prec) << scientific << chi_
+         << setw(width) << setprecision(prec) << scientific << Esqrd
+         << setw(width) << setprecision(prec) << scientific << Msqrd
           << endl;
     }
     ofile.close();
  }
  /////
- void Ising::printcycles(){
-    mcmc_cycles(beta1_,1);
-    mcmc_cycles(beta2_,2);
- }
+//  void Ising::printcycles(){
+//     mcmc_cycles(beta1_,1);
+//     mcmc_cycles(beta2_,2);
+//  }
 
-void Ising::mcmc_cycles(double beta, int h){
-    ofstream ofile;
-    ofile.open("MCcycle_beta" + to_string(h) + ".txt");
-    int width = 23; 
-    int prec  = 9;
-    beta_ = beta;
-    dE_values();
-    for (int i=0; i<mccycles_.size(); i++){
-        mc_cycles_ = mccycles_[i];
-        monte_carlo();
-        ofile << setw(width) << setprecision(prec) << scientific << mc_cycles_(i)
-          << setw(width) << setprecision(prec) << scientific << Eavg
-          << setw(width) << setprecision(prec) << scientific << Mavg
-          << endl;
-    }
-    ofile.close();
- }
+// void Ising::mcmc_cycles(double beta, int h){
+//     ofstream ofile;
+//     ofile.open("MCcycle_beta" + to_string(h) + ".txt");
+//     int width = 23; 
+//     int prec  = 9;
+//     beta_ = beta;
+//     dE_values();
+//     for (int i=0; i<mccycles_.size(); i++){
+//         mc_cycles_ = mccycles_[i];
+//         monte_carlo();
+//         ofile << setw(width) << setprecision(prec) << scientific << mc_cycles_(i)
+//           << setw(width) << setprecision(prec) << scientific << Eavg
+//           << setw(width) << setprecision(prec) << scientific << Mavg
+//           << endl;
+//     }
+//     ofile.close();
+//  }
  ////
  // Printout values
  void Ising::print(){

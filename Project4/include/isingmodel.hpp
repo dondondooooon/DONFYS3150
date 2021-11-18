@@ -33,7 +33,7 @@ public:
  double beta_; // Inverse Temperature
  vec bvec_; // Inverse Temperature Vector
  int mc_cycles_; // Number of MCMC cycles
- double norm_; // Normalizing Factor For Averages
+ double cnorm_; // Normalizing Factor For Averages
  vec boltz_ = vec(17).fill(0.);  // Delta Energy Values
  int i_flip; // Row Flip Index
  int j_flip; // Column Flip Index
