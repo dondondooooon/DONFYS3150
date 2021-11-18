@@ -11,14 +11,16 @@ class Ising
 private:
  double E_;
  double M_;
+ double Esum;
+ double Msum;
  double Eavg; // Mean Energy
  double Mavg; // Mean Magnetization
  double E2_; 
  double M2_; 
  double Esqrd; // Mean Energy^2
  double Msqrd; // Mean Magnetization^2
- double cv_; // Heat Capacity
- double chi_; // Magnetic Suceptibility
+//  double cv_; // Heat Capacity
+//  double chi_; // Magnetic Suceptibility
 
 
 public:
@@ -52,7 +54,7 @@ public:
  void dE_values();
 
  // Initial Spin Configuration
- void start_config();
+ void start_config(bool order);
 
  // Periodic Boundary Condition
  int Periodic(int i, int L);
@@ -92,6 +94,9 @@ public:
 
  // Temperature Monte Carlo plots
  void mc_temp();
+
+ // Cycle Monte Carlo plot
+ void cycle_plot(double temperature, string t);
 
  // Print out
  void print();

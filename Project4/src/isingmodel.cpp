@@ -4,7 +4,7 @@
 Ising::Ising(int L_in, vec Tvec_in, int cycles_in) : generate(rando()) { // Initialize Ising Model
     L_ = L_in;
     N_ = L_*L_;
-    start_config();
+    start_config(true);
     E_ = E(S_);
     M_ = M(S_);
     E2_ = E_*E_;
@@ -24,20 +24,23 @@ Ising::Ising(int L_in, vec Tvec_in, int cycles_in) : generate(rando()) { // Init
     distribution_double = dist_double;
 }
 // Initial Spin Configuration
-void Ising::start_config(){
-    // int randNum;
-    // srand(time(NULL)); // Seed Generate
-    S_ = mat(L_,L_).fill(1);
-    // S_ = mat(L_,L_);
-    // for (int i = 0;i< L_; i++){
-    //     for(int j = 0;j< L_; j++){
-    //         randNum =  rand() % 2; 
-    //         if(randNum == 0){
-    //             randNum = -1;
-    //         }
-    //         S_(i,j) = randNum;
-    //     }
-    // }
+void Ising::start_config(bool order){
+    if (order==true){
+        S_ = mat(L_,L_).fill(1);
+    }
+    else{
+    S_ = mat(L_,L_);
+    int randNum;
+    srand(time(NULL)); // Seed Generate
+    for (int i = 0;i< L_; i++){
+        for(int j = 0;j< L_; j++){
+            randNum =  rand() % 2; 
+            if(randNum == 0){
+                randNum = -1;
+            }
+            S_(i,j) = randNum;
+        }
+    }}
 }
 // Periodic Boundary Condition
 inline int Ising::Periodic(int i, int L){
@@ -160,8 +163,6 @@ double Ising::p(int dE){
     cout << "Number of Monte Carlo Cycles: " << mc_cycles_ << endl;
     cout << "Energy per Spin: " << Eavg << endl;
     cout << "Magnetization per Spin: " << Mavg << endl;
-    cout << "The Heat Capacity: " << cv_ << endl;
-    cout << "The Magnetic Suscpeptibility: " << chi_ << endl;
  }
  // Temperature Monte Carlo plots
  void Ising::mc_temp(){
@@ -182,30 +183,32 @@ double Ising::p(int dE){
     }
     ofile.close();
  }
- /////
-//  void Ising::printcycles(){
-//     mcmc_cycles(beta1_,1);
-//     mcmc_cycles(beta2_,2);
-//  }
-
-// void Ising::mcmc_cycles(double beta, int h){
-//     ofstream ofile;
-//     ofile.open("MCcycle_beta" + to_string(h) + ".txt");
-//     int width = 23; 
-//     int prec  = 9;
-//     beta_ = beta;
-//     dE_values();
-//     for (int i=0; i<mccycles_.size(); i++){
-//         mc_cycles_ = mccycles_[i];
-//         monte_carlo();
-//         ofile << setw(width) << setprecision(prec) << scientific << mc_cycles_(i)
-//           << setw(width) << setprecision(prec) << scientific << Eavg
-//           << setw(width) << setprecision(prec) << scientific << Mavg
-//           << endl;
-//     }
-//     ofile.close();
-//  }
- ////
+// Cycle Monte Carlo plot
+ void Ising::cycle_plot(double temperature, string t){
+    ofstream ofile;
+    ofile.open("cycle_ordered" + t + ".txt"); // + "unordererd" for when order == false
+    int width = 23; 
+    int prec  = 9;
+    beta_ = 1.0/temperature;
+    dE_values();
+    for (int i=1; i<mc_cycles_+1; i++){
+        // 1 MC CYCLE SAMPLING 
+        for (int j=0; j<N_; j++){ 
+            metropolis();
+        }
+        Esum += E_;
+        Msum += fabs(M_);
+        cnorm_ = 1.0/( (double) i );
+        Eavg = Esum * cnorm_;
+        Mavg = Msum * cnorm_;
+    
+        ofile << setw(width) << setprecision(prec) << scientific << i
+        << setw(width) << setprecision(prec) << scientific << Eavg
+        << setw(width) << setprecision(prec) << scientific << Mavg
+        << endl;
+    }
+    ofile.close();
+ }
  // Printout values
  void Ising::print(){
     cout << "This is E_average: " << Eavg << endl;
