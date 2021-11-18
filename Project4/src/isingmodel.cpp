@@ -11,8 +11,7 @@ Ising::Ising(int L_in, vec Tvec_in, int cycles_in) : generate(rando()) { // Init
     M2_ = M_*M_;
     mc_cycles_ = cycles_in;
     invN_ = 1./N_;
-    cnorm_ = 1.0/(mc_cycles_);
-    invmc = 1.0/mc_cycles_;
+    cnorm_ = 1.0/mc_cycles_;
     Tvec_ = Tvec_in;
     tsize_ = Tvec_.size();
     bvec_ = vec(tsize_);

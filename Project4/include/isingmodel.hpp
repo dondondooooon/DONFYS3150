@@ -23,7 +23,6 @@ private:
 
 public:
  double kb = 1.; // Boltzmann Constant
- double invmc;
  int J_ = 1; // Association Energy Constant
  int L_;  // Length of Spin Configuration
  int N_; // Number of Spins
