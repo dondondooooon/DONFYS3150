@@ -89,17 +89,14 @@ public:
  // Monte Carlo
  void monte_carlo();
 
- // Printout for T = 1
- void printT1();
-
  // Temperature Monte Carlo plots
  void mc_temp();
 
- // Cycle Monte Carlo plot
+ // Cycles Monte Carlo plot
  void cycle_plot(double temperature, string t);
 
- // Print out
- void print();
+ // Printout for T = 1
+ void printT1();
 
 };
 

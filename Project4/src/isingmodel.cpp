@@ -98,14 +98,6 @@ void Ising::dE_values(){
 double Ising::p(int dE){
     return boltz_[dE+8];
 }
- // Specific Heat Capacity
- double Ising::Cv(){
-    return beta_*beta_*N_*(Esqrd-N_*Eavg*Eavg);
- }
- // Magnetic Susceptibility
- double Ising::Chi(){
-    return beta_*N_*(Msqrd-N_*Mavg*Mavg);
- }
 
  //*******// Markov Chain Monte Carlo: Metropolis //*******//
 
@@ -134,35 +126,23 @@ double Ising::p(int dE){
  }
  // Monte Carlo
  void Ising::monte_carlo(){
-    // MC CYCLES LOOP
+    // MC cycles
     for (int k=0; k<mc_cycles_; k++){
-        // 1 MC CYCLE SAMPLING 
+        // 1 MC Cycle Sampling
         for (int i=0; i<N_; i++){ 
             metropolis();
-            // Eavg += E_;
-            // Mavg += fabs(M_);
-            // Esqrd += E2_;
-            // Msqrd += M2_;
         }
+        // Update Values
         Eavg += E_;
         Mavg += fabs(M_);
         Esqrd += E_*E_;
         Msqrd += M_*M_;
     }
+    // Normalize w/ The  MC Cycles
     Eavg *= cnorm_;
     Mavg *= cnorm_;
     Esqrd *= cnorm_;
     Msqrd *= cnorm_;
- }
- // Printout for T = 1
- void Ising::printT1(){
-    // T = 1
-    beta_ = 1.0/(kb*1.0);
-    dE_values();
-    monte_carlo();
-    cout << "Number of Monte Carlo Cycles: " << mc_cycles_ << endl;
-    cout << "Energy per Spin: " << Eavg << endl;
-    cout << "Magnetization per Spin: " << Mavg << endl;
  }
  // Temperature Monte Carlo plots
  void Ising::mc_temp(){
@@ -175,15 +155,15 @@ double Ising::p(int dE){
         dE_values();
         monte_carlo();
         ofile << setw(width) << setprecision(prec) << scientific << Tvec_(i)
-          << setw(width) << setprecision(prec) << scientific << Eavg
-          << setw(width) << setprecision(prec) << scientific << Mavg
-         << setw(width) << setprecision(prec) << scientific << Esqrd
-         << setw(width) << setprecision(prec) << scientific << Msqrd
-          << endl;
+        << setw(width) << setprecision(prec) << scientific << Eavg
+        << setw(width) << setprecision(prec) << scientific << Mavg
+        << setw(width) << setprecision(prec) << scientific << Esqrd
+        << setw(width) << setprecision(prec) << scientific << Msqrd
+        << endl;
     }
     ofile.close();
  }
-// Cycle Monte Carlo plot
+ // Cycles Monte Carlo plot
  void Ising::cycle_plot(double temperature, string t){
     ofstream ofile;
     ofile.open("cycle_ordered" + t + ".txt"); // + "unordererd" for when order == false
@@ -209,12 +189,19 @@ double Ising::p(int dE){
     }
     ofile.close();
  }
- // Printout values
- void Ising::print(){
-    cout << "This is E_average: " << Eavg << endl;
-    cout << "This is M_avgerage: " << Mavg << endl;
-    // cout << "This is E^2 avg: " << E2_/L_/L_ << endl;
-    // cout << "This is M^2 avg: " << M2_ << endl;
-    // cout << "This is the heat capacity: " << cv_/L_/L_ << endl;
-    // cout << "This is the mag. suscp.: " << chi_ << endl;
+ // Printout Values for T = 1
+ void Ising::printT1(){
+    ofstream ofile;
+    ofile.open("T=1_printout"+to_string(mc_cycles_)+".txt");
+    int width = 23; 
+    int prec  = 9;
+    beta_ = 1.0/(kb*1.0);
+    dE_values();
+    monte_carlo();
+    ofile << setw(width) << setprecision(prec) << scientific << mc_cycles_
+    << setw(width) << setprecision(prec) << scientific << Eavg
+    << setw(width) << setprecision(prec) << scientific << Mavg
+    << setw(width) << setprecision(prec) << scientific << Esqrd
+    << setw(width) << setprecision(prec) << scientific << Msqrd
+    << endl;
  }
