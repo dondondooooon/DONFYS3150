@@ -1,7 +1,8 @@
 #include "isingmodel.hpp"
 
 // Constructor Definition
-Ising::Ising(int L_in, vec Tvec_in, int cycles_in) : generate(rando()) { // Initialize Ising Model
+Ising::Ising(int L_in, vec Tvec_in, int cycles_in) : generate(rando()) { 
+    // Initial Spin Configuration, Energy, Magnetization
     L_ = L_in;
     N_ = L_*L_;
     start_config(true);
@@ -9,15 +10,17 @@ Ising::Ising(int L_in, vec Tvec_in, int cycles_in) : generate(rando()) { // Init
     M_ = M(S_);
     E2_ = E_*E_;
     M2_ = M_*M_;
-    mc_cycles_ = cycles_in;
-    invN_ = 1./N_;
-    cnorm_ = 1.0/mc_cycles_;
+    // Temperature Vector Defintions
     Tvec_ = Tvec_in;
     tsize_ = Tvec_.size();
     bvec_ = vec(tsize_);
     for (int i=0; i<tsize_; i++){
         bvec_(i) = 1./(kb*Tvec_(i));
     }
+    // Monte Carlo Cycles Definition
+    mc_cycles_ = cycles_in;
+    cnorm_ = 1.0/mc_cycles_;
+    // Generate Seed
     uniform_real_distribution<double> dist_double(0.0, 1.0);
     uniform_int_distribution<int> dist_int(0.0, L_-1);
     distribution_int = dist_int;
@@ -25,16 +28,16 @@ Ising::Ising(int L_in, vec Tvec_in, int cycles_in) : generate(rando()) { // Init
 }
 // Initial Spin Configuration
 void Ising::start_config(bool order){
-    if (order==true){
+    if (order==true){ // Ordered Initial Spin Configuration
         S_ = mat(L_,L_).fill(1);
     }
-    else{
+    else{ // Unordered Initial Spin Configuration
     S_ = mat(L_,L_);
     int randNum;
-    srand(time(NULL)); // Seed Generate
+    srand(time(NULL)); // Generate Seed
     for (int i = 0;i< L_; i++){
         for(int j = 0;j< L_; j++){
-            randNum =  rand() % 2; 
+            randNum =  rand() % 2; // Random 0 or 1
             if(randNum == 0){
                 randNum = -1;
             }
@@ -74,7 +77,7 @@ int Ising::M(mat S){
     }
     return M;
 }
-// Energy Around The Chosen Spin : dont need stat arg
+// Energy Around The Chosen Spin 
 int Ising::E_spin(int i, int j){
     int s = S_(i,j);
     int up = S_(Periodic(i-1,L_),Periodic(j,L_));
@@ -86,12 +89,13 @@ int Ising::E_spin(int i, int j){
 // Energy Difference
 int Ising::dE(int i, int j){
     int de = E_spin(i_flip, j_flip);
+    cout << de << endl;
     return 2*de;
 }
 // Delta Energy Values
 void Ising::dE_values(){
     for (int i=0; i<17; i+=4){
-        boltz_(i) = exp(-beta_*(i-8)*J_);
+        boltz_(i) = exp(-beta_*(i-8));
     }
 }
 // Probability Ratio for Energy Shift of 1 Spin Change
@@ -163,7 +167,7 @@ double Ising::p(int dE){
     }
     ofile.close();
  }
- // Cycles Monte Carlo plot
+ // Cycles Monte Carlo plots
  void Ising::cycle_plot(double temperature, string t){
     ofstream ofile;
     ofile.open("cycle_ordered" + t + ".txt"); // + "unordererd" for when order == false
@@ -189,13 +193,13 @@ double Ising::p(int dE){
     }
     ofile.close();
  }
- // Printout Values for T = 1
+ // Printout Values for T = 1.0
  void Ising::printT1(){
     ofstream ofile;
     ofile.open("T=1_printout"+to_string(mc_cycles_)+".txt");
     int width = 23; 
     int prec  = 9;
-    beta_ = 1.0/(kb*1.0);
+    beta_ = 1.0; // 1.0/(kb*1.0)
     dE_values();
     monte_carlo();
     ofile << setw(width) << setprecision(prec) << scientific << mc_cycles_
