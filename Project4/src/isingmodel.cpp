@@ -89,7 +89,6 @@ int Ising::E_spin(int i, int j){
 // Energy Difference
 int Ising::dE(int i, int j){
     int de = E_spin(i_flip, j_flip);
-    cout << de << endl;
     return 2*de;
 }
 // Delta Energy Values
@@ -116,7 +115,7 @@ double Ising::p(int dE){
     double accept = p(diff);
     // Generate r From A Uniform RNG
     double r = distribution_double(generate);
-    // To Accept Proposed Or Not
+    // Accept Proposed Or Not
     if (diff<0){
         S_(i_flip,j_flip) *= -1.0;
         E_ += diff;
@@ -155,6 +154,7 @@ double Ising::p(int dE){
     int width = 23; 
     int prec  = 9;
     for (int i=0; i<tsize_; i++){
+        // Set Correct T values
         beta_ = bvec_(i);
         dE_values();
         monte_carlo();
@@ -175,17 +175,19 @@ double Ising::p(int dE){
     int prec  = 9;
     beta_ = 1.0/temperature;
     dE_values();
+    // MC Cycles
     for (int i=1; i<mc_cycles_+1; i++){
-        // 1 MC CYCLE SAMPLING 
+        // 1 MC Cycle Sampling
         for (int j=0; j<N_; j++){ 
             metropolis();
         }
+        // Update Values
         Esum += E_;
         Msum += fabs(M_);
         cnorm_ = 1.0/( (double) i );
         Eavg = Esum * cnorm_;
         Mavg = Msum * cnorm_;
-    
+        // Write Out Values to File As They Evolve
         ofile << setw(width) << setprecision(prec) << scientific << i
         << setw(width) << setprecision(prec) << scientific << Eavg
         << setw(width) << setprecision(prec) << scientific << Mavg
