@@ -64,8 +64,6 @@ Ae = np.zeros(100)
 Am = np.zeros(100)
 Acv = np.zeros(100)
 Ax = np.zeros(100)
-Ncv = np.zeros(100)
-Nx = np.zeros(100)
 tmpf = [1000,10000,100000,10000000]
 for i in range(2):
     infile = open(f'TempPlot{tmpf[i+2]}.txt', 'r')

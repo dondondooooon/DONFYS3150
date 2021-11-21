@@ -150,10 +150,31 @@ double Ising::p(int dE){
  // Temperature Monte Carlo plots
  void Ising::mc_temp(){
     ofstream ofile;
-    ofile.open("TempPlot" + to_string(mc_cycles_) + ".txt");
+    //"TempPlot" + to_string(mc_cycles_) + ".txt" --> Pre Parallellization
+    ofile.open("L=" + to_string(L_) + "Cycle=" + to_string(mc_cycles_) + ".txt"); 
     int width = 23; 
     int prec  = 9;
-    for (int i=0; i<tsize_; i++){
+    #ifdef _OPENMP
+    {
+        #pragma omp parallel for ordered schedule(static)
+        for (int i=0; i<tsize_; i++){
+            // Set Correct T values
+            beta_ = bvec_(i);
+            dE_values();
+            monte_carlo();
+            #pragma omp ordered
+            ofile << setw(width) << setprecision(prec) << scientific << Tvec_(i)
+            << setw(width) << setprecision(prec) << scientific << Eavg
+            << setw(width) << setprecision(prec) << scientific << Mavg
+            << setw(width) << setprecision(prec) << scientific << Esqrd
+            << setw(width) << setprecision(prec) << scientific << Msqrd
+            << endl;
+        }
+        ofile.close();
+    }
+    #else
+    {
+        for (int i=0; i<tsize_; i++){
         // Set Correct T values
         beta_ = bvec_(i);
         dE_values();
@@ -164,8 +185,10 @@ double Ising::p(int dE){
         << setw(width) << setprecision(prec) << scientific << Esqrd
         << setw(width) << setprecision(prec) << scientific << Msqrd
         << endl;
+        }
+        ofile.close();
     }
-    ofile.close();
+    #endif
  }
  // Cycles Monte Carlo plots
  void Ising::cycle_plot(double temperature, string t){

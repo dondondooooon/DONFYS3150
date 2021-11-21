@@ -3,6 +3,8 @@
 
 #include<armadillo>
 #include<random>
+#include<iomanip>
+#include<chrono>
 using namespace arma;
 using namespace std;
 
@@ -36,13 +38,6 @@ private:
 public:
  double kb = 1.; // Boltzmann Constant
  int J_ = 1; // Association Energy Constant
- 
- 
- 
- 
- 
- 
- double invN_; 
 
  // RNG Declaration
  random_device rando;
@@ -84,6 +79,9 @@ public:
 
  // Monte Carlo
  void monte_carlo();
+
+ // Parallellized Temperature Monte Carlo plots
+ void paratemp();
 
  // Temperature Monte Carlo plots
  void mc_temp();
