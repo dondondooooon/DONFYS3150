@@ -1,11 +1,11 @@
 #include "isingmodel.hpp"
 
 // Constructor Definition
-Ising::Ising(int L_in, vec Tvec_in, int cycles_in) : generate(rando()) { 
+Ising::Ising(int L_in, vec Tvec_in, int cycles_in, vec beta_in) : generate(rando()) { 
     // Initial Spin Configuration, Energy, Magnetization
     L_ = L_in;
     N_ = L_*L_;
-    start_config(true);
+    start_config(false); // false for unordered
     E_ = E(S_);
     M_ = M(S_);
     E2_ = E_*E_;
@@ -13,10 +13,12 @@ Ising::Ising(int L_in, vec Tvec_in, int cycles_in) : generate(rando()) {
     // Temperature Vector Defintions
     Tvec_ = Tvec_in;
     tsize_ = Tvec_.size();
-    bvec_ = vec(tsize_);
-    for (int i=0; i<tsize_; i++){
-        bvec_(i) = 1./(kb*Tvec_(i));
-    }
+    bvec_ = beta_in;
+    bsize = bvec_.size();
+    // bvec_ = vec(tsize_);
+    // for (int i=0; i<tsize_; i++){
+    //     bvec_(i) = 1./(kb*Tvec_(i));
+    // }
     // Monte Carlo Cycles Definition
     mc_cycles_ = cycles_in;
     cnorm_ = 1.0/mc_cycles_;
@@ -138,10 +140,12 @@ double Ising::p(int dE){
         // Update Values
         Eavg += E_;
         Mavg += fabs(M_);
+        // cout << "esqrd: " << Esqrd << endl;
         Esqrd += E_*E_;
         Msqrd += M_*M_;
     }
     // Normalize w/ The  MC Cycles
+    // cout << "The cnorm is: " << cnorm_ << endl;
     Eavg *= cnorm_;
     Mavg *= cnorm_;
     Esqrd *= cnorm_;
@@ -150,18 +154,20 @@ double Ising::p(int dE){
  // Temperature Monte Carlo plots
  void Ising::mc_temp(){
     ofstream ofile;
-    //"TempPlot" + to_string(mc_cycles_) + ".txt" --> Pre Parallellization
+    // ofile.open("TempPlot" + to_string(mc_cycles_) + ".txt"); // --> Pre Parallellization
     ofile.open("L=" + to_string(L_) + "Cycle=" + to_string(mc_cycles_) + ".txt"); 
     int width = 23; 
     int prec  = 9;
     #ifdef _OPENMP
     {
-        #pragma omp parallel for ordered schedule(static)
-        for (int i=0; i<tsize_; i++){
+        #pragma omp parallel for ordered
+        for (int i=0; i<bsize; i++){
             // Set Correct T values
             beta_ = bvec_(i);
             dE_values();
             monte_carlo();
+            // #pragma omp atomic
+            //     global_variable += local_thread_variable
             #pragma omp ordered
             ofile << setw(width) << setprecision(prec) << scientific << Tvec_(i)
             << setw(width) << setprecision(prec) << scientific << Eavg

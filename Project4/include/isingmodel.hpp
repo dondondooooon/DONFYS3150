@@ -11,16 +11,21 @@ using namespace std;
 class Ising
 {
 private:
- double E_; // Energy of Microstate
- double M_; // Magnetization of Microstate
- double Esum; // Sum of Energy of Microstate
- double Msum; // Sum of Magnetization of Microstate
- double Eavg; // Mean Energy
- double Mavg; // Mean Magnetization
- double E2_; // Energy^2 of Microstate
- double M2_; // Magnetization^2 of Microstate
- double Esqrd; // Mean Energy^2
- double Msqrd; // Mean Magnetization^2
+ double E_ = 0.; // Energy of Microstate
+ double M_ = 0.; // Magnetization of Microstate
+ double Esum = 0.; // Sum of Energy of Microstate
+ double Msum = 0.; // Sum of Magnetization of Microstate
+ double Eavg = 0.; // Mean Energy
+ double Mavg = 0.; // Mean Magnetization
+ double E2_ = 0.; // Energy^2 of Microstate
+ double M2_ = 0.; // Magnetization^2 of Microstate
+ double Esqrd = 0.; // Mean Energy^2
+ double Msqrd = 0.; // Mean Magnetization^2
+
+//  vector e;
+//  vector m;
+//  vector e2;
+//  vector m2;
 
  int L_;  // Length of Spin Configuration
  int N_; // Number of Spins
@@ -34,6 +39,7 @@ private:
  vec boltz_ = vec(17).fill(0.);  // Delta Energy Values
  vec Tvec_; // Temperature Vector
  mat S_; // Spin Configuration
+ int bsize;
 
 public:
  double kb = 1.; // Boltzmann Constant
@@ -47,7 +53,7 @@ public:
  uniform_int_distribution<int> distribution_int;
 
  // Constructor 
- Ising(int L_in, vec Tvec_in, int cycles_in);
+ Ising(int L_in, vec Tvec_in, int cycles_in, vec beta_in);
 
  // Initial Spin Configuration
  void start_config(bool order);
