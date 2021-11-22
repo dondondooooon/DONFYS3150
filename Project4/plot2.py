@@ -11,14 +11,15 @@ def cap_num(t,x,y):
 def xsup_num(t,x,y):
     return beta(t)*(x-y)
 
-L = 100
+L = 40
 N = L*L
 
 # For VS. Temperature plots
 tmpf = [1000,10000,100000,1000000,10000000,500000]
 for i in range(1):
     # infile = open(f'TempPlot{tmpf[1]}.txt','r')
-    infile = open(f'L={L}Cycle={tmpf[5]}.txt', 'r')
+    #infile = open(f'L={L}Cycle={tmpf[5]}.txt', 'r')
+    infile = open(f'L={L}Cycle=500000.txt', 'r')
     T = []
     E = []
     M = []
