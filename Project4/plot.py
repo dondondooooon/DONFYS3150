@@ -178,7 +178,6 @@ plt.show()
 #     plt.xlabel("MC Cycles")
 #     plt.ylabel(r"$\epsilon$")
 #     if i==0:
-#         #720 690
 #         plt.ylim(-1.999,-1.995)
 #     elif i==1:
 #         plt.ylim(-1.1575,-1.3550)
