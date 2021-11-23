@@ -66,4 +66,6 @@ Build command:
 
 	4th Terminal Window: ./main.exe 2.4 2.4 1 500000 part4.txt
 
-And then combine the data files into one: cat part1.txt part2.txt part3.txt part4.txt > fulldata.txt
+And then combine the data files into one:
+
+	cat part1.txt part2.txt part3.txt part4.txt > fulldata.txt
