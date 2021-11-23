@@ -1,7 +1,8 @@
-allparallell: CompileParallell LinkParallell Execute
+allparallell: CompileParallell LinkParallell 
 
-allseries: CompileSeries LinkSeries Execute
+allseries: CompileSeries LinkSeries
 
+	
 CompileParallell:
 	g++ -c main.cpp src/*.cpp -I include -std=c++11 -Xpreprocessor -fopenmp
 
@@ -13,6 +14,3 @@ LinkParallell:
 
 LinkSeries:
 	g++ *.o -o main.exe -larmadillo
-
-Execute:
-	./main.exe

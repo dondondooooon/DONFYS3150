@@ -34,6 +34,7 @@ private:
  vec bvec_; // Inverse Temperature Vector
  vec boltz_ = vec(17).fill(0.);  // Delta Energy Values
  mat S_; // Spin Configuration
+ string filename_;
 
 
 public:
@@ -94,7 +95,7 @@ public:
  void printT1();
 
  // Histogram approximate for the pdf
- void monte_histogram();
+ void Ising::monte_histogram();
 
 };
 

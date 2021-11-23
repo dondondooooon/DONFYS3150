@@ -1,7 +1,7 @@
 #include "isingmodel.hpp"
 
 // Constructor Definition
-Ising::Ising(int L_in, vec Tvec_in, int cycles_in, vec beta_in) : generate(rando()) { 
+Ising::Ising(int L_in, vec Tvec_in, int cycles_in, vec beta_in, string filename_in) : generate(rando()) { 
     // Initial Spin Configuration, Energy, Magnetization
     L_ = L_in;
     N_ = L_*L_;
@@ -17,6 +17,8 @@ Ising::Ising(int L_in, vec Tvec_in, int cycles_in, vec beta_in) : generate(rando
     // Monte Carlo Cycles Definition
     mc_cycles_ = cycles_in;
     cnorm_ = 1.0/mc_cycles_;
+    // Filename
+    filename_ = filename_in;
     // Generate Seed
     uniform_real_distribution<double> dist_double(0.0, 1.0);
     uniform_int_distribution<int> dist_int(0.0, L_-1);
@@ -153,32 +155,13 @@ double Ising::p(int dE){
  // Temperature Monte Carlo plots
  void Ising::mc_temp(){
     ofstream ofile;
-    // ofile.open("TempPlot" + to_string(mc_cycles_) + ".txt"); // --> Pre Parallellization
-    // ofile.open("L=" + to_string(L_) + "Cycle=" + to_string(mc_cycles_) + ".txt"); 
-    ofile.open("zoomL=" + to_string(L_) + "Cycle=" + to_string(mc_cycles_) + ".txt"); 
     int width = 23; 
     int prec  = 9;
-    #ifdef _OPENMP
-    {
-        #pragma omp parallel for ordered
-        for (int i=0; i<bsize; i++){
-            // Set Correct T values
-            beta_ = bvec_(i);
-            dE_values();
-            monte_carlo();
-            #pragma omp ordered
-            ofile << setw(width) << setprecision(prec) << scientific << Tvec_(i)
-            << setw(width) << setprecision(prec) << scientific << Eavg
-            << setw(width) << setprecision(prec) << scientific << Mavg
-            << setw(width) << setprecision(prec) << scientific << Esqrd
-            << setw(width) << setprecision(prec) << scientific << Msqrd
-            << endl;
-        }
-        ofile.close();
-    }
-    #else
-    {
-        for (int i=0; i<bsize_; i++){
+    // ofile.open("TempPlot" + to_string(mc_cycles_) + ".txt"); // --> Pre Parallellization
+    // ofile.open("L=" + to_string(L_) + "Cycle=" + to_string(mc_cycles_) + ".txt"); 
+    // ofile.open("zoomL=" + to_string(L_) + "Cycle=" + to_string(mc_cycles_) + ".txt"); 
+    ofile.open(filename_.c_str(), offstream::trunc)
+    for (int i=0; i<bsize_; i++){
         // Set Correct T values
         beta_ = bvec_(i);
         dE_values();
@@ -191,8 +174,6 @@ double Ising::p(int dE){
         << endl;
         }
         ofile.close();
-    }
-    #endif
  }
  // Cycles Monte Carlo plots
  void Ising::cycle_plot(double temperature, string t){
