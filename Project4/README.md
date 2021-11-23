@@ -48,7 +48,7 @@ Run command: python3 critical.py
 
 dummy_parallellization
 --------
-In this folder contains a similar version of main.cpp and isingmodel.cpp. However, we attempted an unsuccessful dummy parallelization to see if it would yield the correct data at the same time as shortening the processing time for all data points. It was unsuccessful in that the data points was wrong.
+In this folder contains a similar version of main.cpp and isingmodel.cpp. However, we attempted an unsuccessful dummy parallelization to see if it would yield the correct data at the same time as shortening the processing time for all data points. It was unsuccessful in that the data points were wrong for the other terminal windows.
 
 dummy_parallellization/main.cpp
 --------
