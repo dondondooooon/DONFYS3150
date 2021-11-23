@@ -57,6 +57,7 @@ A similar version of main.cpp except we take in arguments from the terminal wind
 Compile & Linking: make allseries
 
 Build command: 
+	
 	1st Terminal Window: ./main.exe 2.1 2.2 10 500000 part1.txt
 	
 	2nd Terminal Window: ./main.exe 2.2 2.3 10 500000 part2.txt
