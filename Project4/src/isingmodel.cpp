@@ -101,7 +101,7 @@ double Ising::p(int dE){
 
 
 
-.
+
 
  //*******// Markov Chain Monte Carlo: Metropolis //*******//
 
@@ -178,7 +178,7 @@ double Ising::p(int dE){
     }
     #else
     {
-        for (int i=0; i<bsize_; i++){
+        for (int i=0; i<bsize; i++){
         // Set Correct T values
         beta_ = bvec_(i);
         dE_values();
