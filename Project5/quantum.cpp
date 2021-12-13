@@ -40,7 +40,6 @@ double v0_, bool slit1in, bool slit2in, bool slit3in, string sim_){
     else if (slit3 == true){ // Triple Slit
         slit_3();
     }
-    // grid_init(); // Initialize System Grid
 }
 
 //************************//
@@ -184,15 +183,13 @@ void quantum::Cranky(){
     grid_init(); // Initialize System Grid
     set_matsAB(); // Set up Matrix A & B for CN Method
     for (double i=dt; i<T-dt; i+=dt){
-        // cout << "This: " << t_iteration << endl;
         u = U.as_col(); // Coloumn-wise Vectoring of IP
         solver();
         grid_tid.slice(t_iteration)(span(1,L),span(1,L)) = U;
         t_iteration += 1; 
     }
-    // cout << "ThisA!: " << t_iteration << endl;
     // Save Cube Matrix
-    grid_tid.save("Grid_" + sim + ".bin");
+    grid_tid.save("bin_files/Grid_" + sim + ".bin");
 }
 
 
