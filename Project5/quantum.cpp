@@ -27,10 +27,11 @@ double v0_, bool slit1in, bool slit2in, bool slit3in, string sim_){
     slit2 = slit2in;
     slit3 = slit3in;
     sim = sim_; 
-    
+    xvec = regspace(1*h, h, L*h); // Space Vector x-axis
+    yvec = regspace(1*h, h, L*h); // Space Vector y-axis
 
     // Set up Simulation
-    no_slit(); // Initialize Boundary Potential
+    V = cx_mat(M,M).fill(0.); // Initialize Potential 
     if (slit2 == true){ // Double Slit
         slit_2();
     }
@@ -40,21 +41,14 @@ double v0_, bool slit1in, bool slit2in, bool slit3in, string sim_){
     else if (slit3 == true){ // Triple Slit
         slit_3();
     }
+    V.save("bin_files/" + sim + "_V.bin");
+    v = V(span(1,L),span(1,L)).as_col(); // Vectorize Potential
 }
 
 //************************//
 //Potential Class Methods//
 //************************//
 
-// Initialize Potential on Boundary
-void quantum::no_slit(){
-    V = cx_mat(M,M).fill(0.); 
-    // Impose Boundary Potentials
-    V.col(0) = cx_vec(M).fill(v0);
-    V.col(M-1) = cx_vec(M).fill(v0);
-    V.row(0) = cx_vec(M).fill(v0).st();
-    V.row(M-1) = cx_vec(M).fill(v0).st();
-} 
 // Initialize Potential w/ 2 slit
 void quantum::slit_2(){
     int start_wall = M/2-3; // Start of Wall
@@ -94,17 +88,17 @@ void quantum::slit_3(){
 //*********************//
 
 // Gaussian Wave Packet
-cx_double quantum::func(int i, int j){
-    cx_double euler( -((i-xc)*(i-xc))/(2*xsig*xsig) - ((j-yc)*(j-yc))/(2*ysig*ysig)
-    , px*(i-xc) + py*(j-yc) );
+cx_double quantum::func(double xi, double yj){
+    cx_double euler( -((xi-xc)*(xi-xc))/(2*xsig*xsig) - ((yj-yc)*(yj-yc))/(2*ysig*ysig)
+    , px*(xi-xc) + py*(yj-yc) );
     return exp(euler);
 }
-// Initialize & Normalize a grid point
-void quantum::wavepoints(int i, int j){
+// Initialize & Normalize U 
+void quantum::wavepoints(){
     cx_double normsum;
-    for (int i=0; i<L; i++){
+    for (int i=0; i<L; i++){ 
         for(int j=0; j<L; j++){
-            U(i,j) = func(i,j);
+            U(i,j) = func(xvec(i),yvec(j));
             normsum += norm(U(i,j));
         }
     }
@@ -112,16 +106,14 @@ void quantum::wavepoints(int i, int j){
 }
 // Initialize System
 void quantum::grid_init(){
-    grid_tid = cx_cube(M,M,tn); // Cube for System Grid with Time slices
-    grid_tid.slice(0) = V; // Add Potential
+    grid_tid = cx_cube(M,M,tn+1); // Cube for System Grid with Time slices
+    // Add Boundary Condition (Fill zeros)
+    grid_tid.slice(0).col(0) = cx_vec(M).fill(0.);
+    grid_tid.slice(0).col(M-1) = cx_vec(M).fill(0.);
+    grid_tid.slice(0).row(0) = cx_vec(M).fill(0.).st();
+    grid_tid.slice(0).row(M-1) = cx_vec(M).fill(0.).st();
     U = grid_tid.slice(0)(span(1,L),span(1,L)); // Initialize Inner Points Matrix (IP)
-    // v = U.as_col();
-    for (int i=0; i<L; i++){
-        for(int j=0; j<L; j++){
-            wavepoints(i,j);
-        }
-    }
-    v = grid_tid.slice(0)(span(1,L),span(1,L)).as_col(); // Vectorize Potential
+    wavepoints(); // Build wavepacket in U
     grid_tid.slice(0)(span(1,L),span(1,L)) = U; // Add Wave Function into Grid Matrix
 }
 
@@ -182,7 +174,7 @@ void quantum::solver(){
 void quantum::Cranky(){
     grid_init(); // Initialize System Grid
     set_matsAB(); // Set up Matrix A & B for CN Method
-    for (double i=dt; i<T-dt; i+=dt){
+    for (double i=dt; i<T+dt; i+=dt){
         u = U.as_col(); // Coloumn-wise Vectoring of IP
         solver();
         grid_tid.slice(t_iteration)(span(1,L),span(1,L)) = U;
@@ -190,6 +182,7 @@ void quantum::Cranky(){
     }
     // Save Cube Matrix
     grid_tid.save("bin_files/Grid_" + sim + ".bin");
+    // Save Potential Matrix as well
 }
 
 

@@ -33,6 +33,8 @@ public:
  bool slit2; // Double Slit
  bool slit3; // Triple Slit
  string sim; 
+ vec xvec; // Space Vector x-axis
+ vec yvec; // Space Vector y-axis
 
  cx_mat V; // Potential Matrix
  cx_vec v; // Vectorized Potential
@@ -43,7 +45,7 @@ public:
  cx_vec b; // b vector for CN method
  sp_cx_mat A; // A matrix for CN method
  sp_cx_mat B; // B matrix for CN method
- cx_vec new_u;
+//  cx_vec new_u;
 //  cx_mat U_new; 
 
  // Constructor 
@@ -51,8 +53,6 @@ public:
  double xsig_, double px_, double yc_, double ysig_, double py_,
  double v0_, bool slit1in, bool slit2in, bool slit3in, string sim_);
 
- // Initialize Potential on Boundary
- void no_slit();
 
  // Initialize Potential w/ 2 slit
  void slit_2();
@@ -64,10 +64,10 @@ public:
  void slit_3();
 
  // Gaussian Wave Packet
- cx_double func(int i, int j);
+ cx_double func(double xi, double yj);
 
  // Initialize & Normalize a grid point
- void wavepoints(int i, int j);
+ void wavepoints();
 
  // Initialize U
  void grid_init();
