@@ -31,7 +31,7 @@ double v0_, bool slit1in, bool slit2in, bool slit3in, string sim_){
     yvec = regspace(1*h, h, L*h); // Space Vector y-axis
 
     // Set up Simulation
-    V = cx_mat(M,M).fill(0.); // Initialize Potential 
+    V = mat(M,M).fill(0.); // Initialize Potential 
     if (slit2 == true){ // Double Slit
         slit_2();
     }
@@ -41,7 +41,7 @@ double v0_, bool slit1in, bool slit2in, bool slit3in, string sim_){
     else if (slit3 == true){ // Triple Slit
         slit_3();
     }
-    V.save("bin_files/" + sim + "_V.bin");
+    V.save("bin_files/" + sim + "_V.bin"); // Save Potential Matrix as well
     v = V(span(1,L),span(1,L)).as_col(); // Vectorize Potential
 }
 
@@ -54,33 +54,33 @@ void quantum::slit_2(){
     int start_wall = M/2-3; // Start of Wall
     int end_wall = start_wall + 4; // End of Wall
     // Fill First 5x41 Wall
-    V(span(start_wall,end_wall),span(1,start_wall-6)) = cx_mat(5,41).fill(v0);
+    V(span(start_wall,end_wall),span(1,start_wall-6)) = mat(5,41).fill(v0);
     // Fill 5x5 Slit
-    V(span(start_wall,end_wall),span(start_wall,end_wall)) = cx_mat(5,5).fill(v0);
+    V(span(start_wall,end_wall),span(start_wall,end_wall)) = mat(5,5).fill(v0);
     // Fill Last 5x41 Wall
-    V(span(start_wall,end_wall),span(end_wall+7,M-2)) = cx_mat(5,41).fill(v0);
+    V(span(start_wall,end_wall),span(end_wall+7,M-2)) = mat(5,41).fill(v0);
 }
 // Initialize Potential w/ 1 slit
 void quantum::slit_1(){
     int start_wall = M/2-3; // Start of Wall
     int end_wall = start_wall + 4; // End of Wall
     // Fill First 5x41 Wall
-    V(span(start_wall,end_wall),span(1,start_wall-6)) = cx_mat(5,41).fill(v0);
+    V(span(start_wall,end_wall),span(1,start_wall-6)) = mat(5,41).fill(v0);
     // Fill Last 5x41 Wall
-    V(span(start_wall,end_wall),span(end_wall+7,M-2)) = cx_mat(5,41).fill(v0);
+    V(span(start_wall,end_wall),span(end_wall+7,M-2)) = mat(5,41).fill(v0);
 }
 // Initialize Potential w/ 3 slit
 void quantum::slit_3(){
     int start_wall = M/2-3; // Start of Wall
     int end_wall = start_wall + 4; // End of Wall
     // Fill First 5x41 Wall
-    V(span(start_wall,end_wall),span(1,start_wall-6-4)) = cx_mat(5,37).fill(v0);
+    V(span(start_wall,end_wall),span(1,start_wall-6-4)) = mat(5,37).fill(v0);
     // Fill First 5x5 Slit
-    V(span(start_wall,end_wall),span(start_wall-5,start_wall-1)) = cx_mat(5,5).fill(v0);
+    V(span(start_wall,end_wall),span(start_wall-5,start_wall-1)) = mat(5,5).fill(v0);
     // Fill Second 5x5 Slit
-    V(span(start_wall,end_wall),span(end_wall+1,end_wall+5)) = cx_mat(5,5).fill(v0);
+    V(span(start_wall,end_wall),span(end_wall+1,end_wall+5)) = mat(5,5).fill(v0);
     // Fill Last 5x41 Wall
-    V(span(start_wall,end_wall),span(end_wall+11,M-2)) = cx_mat(5,37).fill(v0);
+    V(span(start_wall,end_wall),span(end_wall+11,M-2)) = mat(5,37).fill(v0);
 }
 
 //*********************//
@@ -106,7 +106,7 @@ void quantum::wavepoints(){
 }
 // Initialize System
 void quantum::grid_init(){
-    grid_tid = cx_cube(M,M,tn+1); // Cube for System Grid with Time slices
+    grid_tid = cx_cube(M,M,tn); // Cube for System Grid with Time slices
     // Add Boundary Condition (Fill zeros)
     grid_tid.slice(0).col(0) = cx_vec(M).fill(0.);
     grid_tid.slice(0).col(M-1) = cx_vec(M).fill(0.);
@@ -129,12 +129,12 @@ int quantum::correct_index(int i, int j){
 
 // A diagonal value
 cx_double quantum::af(int k){
-    cx_double send( 1.0 , 4*imag(r) + imag(dt_half)*imag(v(k)) );
+    cx_double send( 1.0 , 4*imag(r) + imag(dt_half)*v(k) );
     return send;
 }
 // B diagonal value
 cx_double quantum::bf(int k){
-    cx_double send( 1.0 , -4*imag(r) - imag(dt_half)*imag(v(k)) );
+    cx_double send( 1.0 , -4*imag(r) - imag(dt_half)*v(k) );
     return send;
 }
 // Set up Matrix A and B
@@ -174,17 +174,26 @@ void quantum::solver(){
 void quantum::Cranky(){
     grid_init(); // Initialize System Grid
     set_matsAB(); // Set up Matrix A & B for CN Method
-    for (double i=dt; i<T+dt; i+=dt){
+    for (double i=dt; i<T; i+=dt){ // See comment below for this loop
+        cout << "i: " << i << endl;
+        cout << "t_iteration: " << t_iteration << endl;
         u = U.as_col(); // Coloumn-wise Vectoring of IP
         solver();
         grid_tid.slice(t_iteration)(span(1,L),span(1,L)) = U;
         t_iteration += 1; 
     }
+    cout << "Final Iteration: " << t_iteration << endl;
     // Save Cube Matrix
     grid_tid.save("bin_files/Grid_" + sim + ".bin");
-    // Save Potential Matrix as well
 }
-
+/* 
+Comment on the time loop:
+For some reason when running simulation 1 and 2, i had to 
+add "i<T-dt" part on the loop condition since it for some 
+bizzare reason it would run 1 extra loop. In other words, 
+in simulation 1 & 2, this loop accepted the condition i=0.008 < 0.008... 
+which doesnt make sense.
+*/
 
 
 

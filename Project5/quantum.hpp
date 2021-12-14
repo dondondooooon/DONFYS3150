@@ -36,8 +36,8 @@ public:
  vec xvec; // Space Vector x-axis
  vec yvec; // Space Vector y-axis
 
- cx_mat V; // Potential Matrix
- cx_vec v; // Vectorized Potential
+ mat V; // Potential Matrix
+ vec v; // Vectorized Potential
  cx_mat U; // Inner Points Matrix
  cx_vec u; // Initial Vectorized IP Matrix
  cx_cube grid_tid; // Cube Matrix of IP Matrices with Time

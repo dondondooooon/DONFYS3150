@@ -8,10 +8,13 @@ import matplotlib.pyplot as plt
 # # Initialize Containers
 # S = pa.cx_cube()
 # sums = []
-# # Load Cube Matrix 
+# # Load Cube Matrix
+
 # # sim = 1 
 # # sim = 2
+
 # S.load(f"bin_files/Grid_Simulation{sim}.bin") # Unload Simulation bin
+# print(S)
 # Sconj = pa.conj(S) # complex conjugate of each element in S
 # Sprob = S@Sconj # S element-wise multiplied by conjugate of S
 # # Perform Data Processing
@@ -22,8 +25,10 @@ import matplotlib.pyplot as plt
 #             sum += Sprob[i,j,k] # Sum up probability in 1 time slice
 #     sums.append( sum ) # append to list
 # # Write to file
+
 # # ofile = open("data_files/data_sim_1.txt", "w") # Comment out accordingly
 # # ofile = open("data_files/data_sim_2.txt", "w") # Comment out accordingly
+
 # for line in sums:
 #     ofile.write(str(line))
 #     ofile.write("\n")
@@ -43,7 +48,8 @@ relS = np.array( pa.real(S) )
 imgS = np.array( pa.imag(S) )
 prob = np.array( pa.real(Sprob) ) # Since imaginary is 0s
 # Write to file
-timeslice = np.array( [0, 39, 79] ) # get time = 0, 0.001, 0.002
+# timeslice = np.array( [0, 1,2,3,4,5,6,7,8,9,10,39, 59, 69, 75, 78, 79] ) # get time = 0, 0.001, 0.002
+timeslice = np.arange(0,80,1)
 for k in timeslice:
     probfile = open(f"data_files/Sprob_t={k}.txt", "w")
     realfile = open(f"data_files/Sreal_t={k}.txt", "w")

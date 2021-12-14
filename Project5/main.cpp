@@ -14,15 +14,15 @@ int main(){
     double yc = 0.5; // Center Coordinate of Initial Wave Packet
     double py = 0.; // Wave Packet Momenta
 
-    // Simulation 1 (with 1 plot)
-    double T = 0.008; // End Time
-    double ysig = 0.05; // Initial Widths of Wave Packet
-    double v0 = 0.; // Constant Potential
-    // Set to true to turn on selected slit
-    bool slit1 = false;
-    bool slit2 = false;
-    bool slit3 = false;
-    string simulation = "Simulation1";
+    // // Simulation 1 (with 1 plot)
+    // double T = 0.008; // End Time
+    // double ysig = 0.05; // Initial Widths of Wave Packet
+    // double v0 = 0.; // Constant Potential
+    // // Set to true to turn on selected slit
+    // bool slit1 = false;
+    // bool slit2 = false;
+    // bool slit3 = false;
+    // string simulation = "Simulation1";
 
     // // Simulation 2 (with 1 plot)
     // double T = 0.008; // End Time
@@ -52,7 +52,7 @@ int main(){
     // bool slit1 = true;
     // bool slit2 = false;
     // bool slit3 = false;
-    // string simulation = "Simulation3";
+    // string simulation = "Simulation4";
 
     // // Simulation 5
     // double T = 0.002; // End Time
@@ -62,17 +62,15 @@ int main(){
     // bool slit1 = false;
     // bool slit2 = false;
     // bool slit3 = true;
-    // string simulation = "Simulation3";
+    // string simulation = "Simulation5";
 
     // Initialize Simulator
     quantum Schrondinger(M,h,dt,T,xc,xsig,px,yc,ysig,py,
     v0,slit1,slit2,slit3,simulation);
 
-    // cout << "This: " << endl << Schrondinger.xvec << endl;
-    // cout << "sIZE: " << endl << Schrondinger.xvec.size() << endl;
-
     // Run Simulation
-    // Schrondinger.Cranky();
+    Schrondinger.Cranky();
+    cout << "You have run " << simulation << endl;
     // Debug Check
     // Schrondinger.print();
     
