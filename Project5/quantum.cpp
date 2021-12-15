@@ -27,8 +27,8 @@ double v0_, bool slit1in, bool slit2in, bool slit3in, string sim_){
     slit2 = slit2in;
     slit3 = slit3in;
     sim = sim_; 
-    xvec = regspace(1*h, h, L*h); // Space Vector x-axis
-    yvec = regspace(1*h, h, L*h); // Space Vector y-axis
+    xvec = regspace(1*h, h, (M-1)*h); // Space Vector x-axis
+    yvec = regspace(1*h, h, (M-1)*h); // Space Vector y-axis
 
     // Set up Simulation
     V = mat(M,M).fill(0.); // Initialize Potential 
@@ -41,7 +41,7 @@ double v0_, bool slit1in, bool slit2in, bool slit3in, string sim_){
     else if (slit3 == true){ // Triple Slit
         slit_3();
     }
-    V.save("bin_files/" + sim + "_V.bin"); // Save Potential Matrix as well
+    // V.save("bin_files/" + sim + "_V.bin"); // Save Potential Matrix as well
     v = V(span(1,L),span(1,L)).as_col(); // Vectorize Potential
 }
 
@@ -54,33 +54,33 @@ void quantum::slit_2(){
     int start_wall = M/2-3; // Start of Wall
     int end_wall = start_wall + 4; // End of Wall
     // Fill First 5x41 Wall
-    V(span(start_wall,end_wall),span(1,start_wall-6)) = mat(5,41).fill(v0);
+    V(span(start_wall,end_wall),span(1,start_wall-6)) = mat(5,91).fill(v0);
     // Fill 5x5 Slit
     V(span(start_wall,end_wall),span(start_wall,end_wall)) = mat(5,5).fill(v0);
     // Fill Last 5x41 Wall
-    V(span(start_wall,end_wall),span(end_wall+7,M-2)) = mat(5,41).fill(v0);
+    V(span(start_wall,end_wall),span(end_wall+7,M-2)) = mat(5,91).fill(v0);
 }
 // Initialize Potential w/ 1 slit
 void quantum::slit_1(){
     int start_wall = M/2-3; // Start of Wall
     int end_wall = start_wall + 4; // End of Wall
     // Fill First 5x41 Wall
-    V(span(start_wall,end_wall),span(1,start_wall-6)) = mat(5,41).fill(v0);
+    V(span(start_wall,end_wall),span(1,start_wall-6)) = mat(5,91).fill(v0);
     // Fill Last 5x41 Wall
-    V(span(start_wall,end_wall),span(end_wall+7,M-2)) = mat(5,41).fill(v0);
+    V(span(start_wall,end_wall),span(end_wall+7,M-2)) = mat(5,91).fill(v0);
 }
 // Initialize Potential w/ 3 slit
 void quantum::slit_3(){
     int start_wall = M/2-3; // Start of Wall
     int end_wall = start_wall + 4; // End of Wall
     // Fill First 5x41 Wall
-    V(span(start_wall,end_wall),span(1,start_wall-6-4)) = mat(5,37).fill(v0);
+    V(span(start_wall,end_wall),span(1,start_wall-6-4)) = mat(5,87).fill(v0);
     // Fill First 5x5 Slit
     V(span(start_wall,end_wall),span(start_wall-5,start_wall-1)) = mat(5,5).fill(v0);
     // Fill Second 5x5 Slit
     V(span(start_wall,end_wall),span(end_wall+1,end_wall+5)) = mat(5,5).fill(v0);
     // Fill Last 5x41 Wall
-    V(span(start_wall,end_wall),span(end_wall+11,M-2)) = mat(5,37).fill(v0);
+    V(span(start_wall,end_wall),span(end_wall+11,M-2)) = mat(5,87).fill(v0);
 }
 
 //*********************//
@@ -121,7 +121,7 @@ void quantum::grid_init(){
 //System Evolution via Crank Nicolson//
 //***********************************//
 
-/* Ikke brukt ???
+/* Har ikke brukt dette fordi .col_as() funker like fint:D
 // Convert 2 index ij to 1 index k
 int quantum::correct_index(int i, int j){
     return j*L+i;
@@ -213,25 +213,3 @@ void quantum::print(){
     }
     cout << "This: " << endl << setprecision(10) << sum << endl;
 }
-
-// // // // Solve A*u_new = B*u_old via Armadillo Solver for Sparse Matrices
-// // // void quantum::solver(cx_vec ux){
-// // //     ux = spsolve(A,B*u);
-// // //     U.reset();
-// // //     U = cx_mat(ux);
-// // //     U.reshape(L,L); // New Inner Points Matrix
-// // // }
-// // // // Run Crank-Nicolson for time steps
-// // // void quantum::Cranky(){
-// // //     set_matsAB(); // Set up Matrix A & B for CN Method
-// // //     for (double i=0.; i<T-dt; i+=dt){
-// // //         t_iteration += 1;
-// // //         // cout << "This: " << t_iteration << endl;
-// // //         u = U.as_col(); // Coloumn-wise Vectoring of IP
-// // //         solver(u);
-// // //         grid_tid.slice(i+1)(span(1,L),span(1,L)) = U; 
-// // //     }
-// // //     cout << "This: " << t_iteration << endl;
-// // //     // Save Cube Matrix
-// // //     grid_tid.save("Grid_" + sim + ".bin");
-// // // }

@@ -1,12 +1,11 @@
 #include <iostream>
 #include"quantum.hpp"
 
-int single_index(mat A);
-
 int main(){
     // Initialization (Common for all Simulations)
-    int M = 100; // Number of points along gird axis
     double h = 0.005; // Spacestep
+    int M = 1/h; // Number of points along gird axis
+    cout << "M = " << M << endl;
     double dt = 0.000025; // Timestep
     double xc = 0.25; // Center Coordinate of Initial Wave Packet
     double xsig = 0.05; // Initial Widths of Wave Packet
@@ -69,8 +68,8 @@ int main(){
     v0,slit1,slit2,slit3,simulation);
 
     // Run Simulation
-    Schrondinger.Cranky();
-    cout << "You have run " << simulation << endl;
+    // Schrondinger.Cranky();
+    // cout << "You have run " << simulation << endl;
     // Debug Check
     // Schrondinger.print();
     
@@ -79,3 +78,56 @@ int main(){
     return 0;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // For Proof that .as_col() should works
+    // // declare:
+    // int ind(int i, int j);
+    //
+    // // Put into main 
+    // vec lin = regspace(0,1,25);
+    // for (int i=0; i<5; i++){
+    //     for (int j=0; j<5; j++){
+    //         Schrondinger.V(i,j) = lin(j*5+i);
+    //     }
+    // }
+    // mat vee = Schrondinger.V(span(1,3),span(1,3));
+    // vec meth = vec(9).fill(0.);
+    // for (int i=0; i<3; i++){
+    //     for (int j=0; j<3; j++){
+    //         meth(ind(i,j)) = vee(i,j);
+    //     }
+    // }
+    // cout << "mat: " << endl <<  Schrondinger.V << endl;
+    // cout << "vec: " << endl << Schrondinger.v << endl;
+    // cout << "vec2: " << endl << meth << endl;
+    // // .as_col method
+    // Schrondinger.v = Schrondinger.V(span(1,3),span(1,3)).as_col();
+    // Schrondinger.set_matsAB(); 
+    // cout << "A: " << endl <<  Schrondinger.A << endl;
+    // cout << "B: " << endl <<  Schrondinger.B << endl;
+    // // j*L+i method
+    // Schrondinger.v = meth;
+    // Schrondinger.set_matsAB(); 
+    // cout << "A: " << endl <<  Schrondinger.A << endl;
+    // cout << "B: " << endl <<  Schrondinger.B << endl;
+    //
+    // // func def:
+    // int ind(int i, int j){
+    // return j*3+i;
