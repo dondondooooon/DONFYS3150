@@ -68,8 +68,8 @@ int main(){
     v0,slit1,slit2,slit3,simulation);
 
     // Run Simulation
-    // Schrondinger.Cranky();
-    // cout << "You have run " << simulation << endl;
+    Schrondinger.Cranky();
+    cout << "You have run " << simulation << endl;
     // Debug Check
     // Schrondinger.print();
     

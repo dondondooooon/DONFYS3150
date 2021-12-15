@@ -5,35 +5,35 @@ import matplotlib.pyplot as plt
 #
 # For Simulation 1 and 2 (Before Problem 8)
 #
-# # Initialize Containers
-# S = pa.cx_cube()
-# sums = []
-# # Load Cube Matrix
+# Initialize Containers
+S = pa.cx_cube()
+sums = []
+# Load Cube Matrix
 
-# # sim = 1 
-# # sim = 2
+sim = 1 
+# sim = 2
 
-# S.load(f"bin_files/Grid_Simulation{sim}.bin") # Unload Simulation bin
-# # print(S)
-# Sconj = pa.conj(S) # complex conjugate of each element in S
-# Sprob = S@Sconj # S element-wise multiplied by conjugate of S
-# # Perform Data Processing
-# for k in range(S.n_slices): # For all time slices
-#     sum = 0 + 0j
-#     for i in range(1,S.n_cols-1,1): # Inner Matrix
-#         for j in range(1,S.n_rows-1,1):
-#             sum += Sprob[i,j,k] # Sum up probability in 1 time slice
-#     print(k)
-#     sums.append( sum ) # append to list
-# # Write to file
+S.load(f"bin_files/Grid_Simulation{sim}.bin") # Unload Simulation bin
+# print(S)
+Sconj = pa.conj(S) # complex conjugate of each element in S
+Sprob = S@Sconj # S element-wise multiplied by conjugate of S
+# Perform Data Processing
+for k in range(S.n_slices): # For all time slices
+    sum = 0 + 0j
+    for i in range(1,S.n_cols-1,1): # Inner Matrix
+        for j in range(1,S.n_rows-1,1):
+            sum += Sprob[i,j,k] # Sum up probability in 1 time slice
+    print(k)
+    sums.append( sum ) # append to list
+# Write to file
 
-# # ofile = open("data_files/data_sim_1.txt", "w") # Comment out accordingly
-# # ofile = open("data_files/data_sim_2.txt", "w") # Comment out accordingly
+ofile = open("data_files/data_sim_1.txt", "w") # Comment out accordingly
+# ofile = open("data_files/data_sim_2.txt", "w") # Comment out accordingly
 
-# for line in sums:
-#     ofile.write(str(line))
-#     ofile.write("\n")
-# ofile.close()
+for line in sums:
+    ofile.write(str(line))
+    ofile.write("\n")
+ofile.close()
 
 
 #

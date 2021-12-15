@@ -45,16 +45,6 @@ def plot_sim(sim):
 
 
 
-# timeslices = np.array([0,12,24,36,49,57,64,72,79])
-# for k in timeslices:
-#     # Get Matrices
-#     Sprob = Matrix('Sprob',k)
-#     Sreal = Matrix('Sreal',k)
-#     Simag = Matrix('Simag',k)
-#     # Set 
-
-
-
 #
 # For Simulation 3
 #
@@ -70,17 +60,10 @@ def Matrix(Sname,k):
     for i in range(200): # Loop thru the list of strings
         for j in range(200):
             s_ij = float( data_strList[i][j] ) # make to float
-            S[i,j] = s_ij # Add into np.array
+            S[j,i] = s_ij # Add into np.array
     return(S)
-# Get time = 0, 0.001, 0.002 atleast
-# timeslices = np.array( [0,1,2,3,4,5,6,7,8,9,10,39,59,69,75,78,79] ) 
-# timeslices = np.arange(0,10,1)
-timeslices = np.array( [0,9,19,29,39,49,59,69,79] )
-for k in timeslices:
-    # Get the matrices
-    Sprob = Matrix('Sprob',k)
-    Sreal = Matrix('Sreal',k)
-    Simag = Matrix('Simag',k)
+def plot_them(k,S,name):
+    time = k*0.000025+0.000025
     # Set up MeshGrid
     M = 200
     h = 0.005
@@ -88,17 +71,38 @@ for k in timeslices:
     ypoints = xpoints
     x,y = np.meshgrid(xpoints,ypoints,sparse=True)
     # Plot
-
-    norm = matplotlib.cm.colors.Normalize(vmin=0.0, vmax=np.max(Sprob))
-
-    plt.pcolormesh(x,y,Sprob,cmap=plt.get_cmap("viridis") ,norm=norm ,shading='auto')#np.sqrt(Sreal@Simag))
-    # plt.pcolormesh(x,y,Vv )
-    plt.colorbar()
-
-    plt.title(f"Time Frame: t={k*0.000025}")
-    plt.xlabel("x")
-    plt.ylabel("y")
+    fig = plt.figure()
+    ax = plt.gca()
+    # Normalize
+    norm = matplotlib.cm.colors.Normalize(vmin=0.0, vmax=np.max(S))
+    # Some settings
+    fontsize = 12
+    x_min, x_max = xpoints[0], xpoints[-1]
+    y_min, y_max = ypoints[0], ypoints[-1]
+    img = ax.imshow(S,extent=[x_min,x_max,y_min,y_max], cmap=plt.get_cmap("viridis"),norm=norm)
+    # Axis labels
+    plt.xlabel("x", fontsize=fontsize)
+    plt.ylabel("y", fontsize=fontsize)
+    plt.xticks(fontsize=fontsize)
+    plt.yticks(fontsize=fontsize)
+    # Add a colourbar
+    cbar = fig.colorbar(img, ax=ax)
+    cbar.set_label(r"$p^n_{ij}$", fontsize=fontsize)
+    cbar.ax.tick_params(labelsize=fontsize)
+    time_txt = plt.text(0.95, 0.95, "t = {:.3e}".format(time), color="white", 
+                    horizontalalignment="right", verticalalignment="top", fontsize=fontsize)
+    plt.savefig(f"plot_figures/{name}_TimeFrame={k}.pdf")
     plt.show()
+def which(name):
+    # Get time = 0, 0.001, 0.002 atleast
+    timeslices = np.array( [0,9,19,29,39,49,59,69,79] ) # Selected Time Frames
+    for k in timeslices:
+        # Get the matricex
+        S = Matrix(name,k)
+        plot_them(k,S,name)
+# name = ['Sprob','Sreal','Simag']
+# for i in range(3):
+#     which( name[ i ] )
 
 
 

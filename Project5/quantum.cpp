@@ -10,11 +10,11 @@ double v0_, bool slit1in, bool slit2in, bool slit3in, string sim_){
     dt = dt_; // Timestep
     T = T_; // End Time
     tn = T/dt; // Number of Time Points
-    xc = xc_ * M; // Center Coordinate of Initial Wave Packet
-    xsig = xsig_ * M; // Initial Widths of Wave Packet
+    xc = xc_; // Center Coordinate of Initial Wave Packet
+    xsig = xsig_; // Initial Widths of Wave Packet
     px = px_; // Wave Packet Momenta
-    yc = yc_ * M; // Center Coordinate of Initial Wave Packet
-    ysig = ysig_ * M; // Initial Widths of Wave Packet
+    yc = yc_; // Center Coordinate of Initial Wave Packet
+    ysig = ysig_; // Initial Widths of Wave Packet
     py = py_; // Wave Packet Momenta
     v0 = v0_; // 10*10*10*10*10*10*10*10*10*10 // High Potential
     r = cx_double (0, dt/(2*h*h) );
@@ -41,7 +41,7 @@ double v0_, bool slit1in, bool slit2in, bool slit3in, string sim_){
     else if (slit3 == true){ // Triple Slit
         slit_3();
     }
-    // V.save("bin_files/" + sim + "_V.bin"); // Save Potential Matrix as well
+    V.save("bin_files/" + sim + "_V.bin"); // Save Potential Matrix as well
     v = V(span(1,L),span(1,L)).as_col(); // Vectorize Potential
 }
 
