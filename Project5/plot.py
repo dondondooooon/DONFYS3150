@@ -75,7 +75,7 @@ def Matrix(Sname,k):
 # Get time = 0, 0.001, 0.002 atleast
 # timeslices = np.array( [0,1,2,3,4,5,6,7,8,9,10,39,59,69,75,78,79] ) 
 # timeslices = np.arange(0,10,1)
-timeslices = np.array( [0,12,24,36,49,57,64,72,79] )
+timeslices = np.array( [0,9,19,29,39,49,59,69,79] )
 for k in timeslices:
     # Get the matrices
     Sprob = Matrix('Sprob',k)
