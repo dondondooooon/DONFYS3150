@@ -20,7 +20,7 @@ Build command for series: make allseries
 
 extract_bins.py
 --------
-This python script reads the .bin files of the selected simulation and exports the necessary data for plotting into .txt files
+This python script reads the .bin files of the selected simulation and exports the necessary data for plotting into .txt files inside the data_files folder.
 
 Run command: python3 extract_bins.py
 
@@ -28,7 +28,7 @@ Run command: python3 extract_bins.py
 
 plot.py
 --------
-This python script reads the appropriate .txt files and plots the data according to the desired quantities / plots / colormap plots. 
+This python script reads the appropriate .txt files and plots the data according to the desired quantities / plots / colormap plots and saves the plot inside the plot_figures folder.
 
 Run command: python3 plot.py
 
