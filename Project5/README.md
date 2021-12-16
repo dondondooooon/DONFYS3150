@@ -1,12 +1,18 @@
 quantum.cpp
 --------
-This is where the Class "quantum" is constructed along with its many class methods used for simulating the two-dimentional time-dependent Schrondinger Equation and the variations of single/double/triple-slit-in-a-box setup.
+This is where the Class "quantum" is constructed along with its many class methods used for simulating the two-dimentional time-dependent Schrondinger Equation and the variations of slit-in-a-box setup.
 
 --------------------------------------------------
 
 main.cpp
 --------
-A C++ program that initializes values that are to be used in the "quantum" class that simulates the Schrondinger Equation, and uses the different class methods in the "quantum" class to both simulate and exports the data which is stored in a cube matrix to the appropriate .bin files. 
+A C++ program that initializes values that are to be used in the "quantum" class that simulates the Schrondinger Equation, and uses the different class methods in the "quantum" class to both simulate and exports the data which is stored in a cube matrix to the appropriate .bin files. There are 5 simulations with their appropriate parameters. 
+
+  1. Simulation 1: No slit for T = 0.008
+  2. Simulation 2: Double Slit for T = 0.008
+  3. Simulation 3: Double slit for T = 0.002
+  4. Simulation 4: Single slit for T = 0.002
+  5. Simulation 5: Triple slit for T = 0.002
 
 Build command for series: make allseries
 
