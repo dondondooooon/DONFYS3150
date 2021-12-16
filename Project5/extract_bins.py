@@ -10,7 +10,7 @@ S = pa.cx_cube()
 sums = []
 # Load Cube Matrix
 
-sim = 1 
+# sim = 1 
 # sim = 2
 
 S.load(f"bin_files/Grid_Simulation{sim}.bin") # Unload Simulation bin
@@ -27,7 +27,7 @@ for k in range(S.n_slices): # For all time slices
     sums.append( sum ) # append to list
 # Write to file
 
-ofile = open("data_files/data_sim_1.txt", "w") # Comment out accordingly
+# ofile = open("data_files/data_sim_1.txt", "w") # Comment out accordingly
 # ofile = open("data_files/data_sim_2.txt", "w") # Comment out accordingly
 
 for line in sums:

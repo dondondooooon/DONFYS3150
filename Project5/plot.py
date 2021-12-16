@@ -21,6 +21,7 @@ def plot_sim(sim):
     plt.plot(t,prob.real) # only real part coz imaginary is 0s
     plt.xlabel("t")
     plt.ylabel(r"$p^n_{total}$")
+    plt.ylim(0.8,1.2)
     plt.savefig(f"plot_figures/sim{sim}_prob.pdf")
     plt.show()
     # Plot Deviation from Probability
@@ -34,7 +35,7 @@ def plot_sim(sim):
     plt.plot(t,dev_data)
     plt.xlabel("t")
     plt.ylabel(r"$1-p^n_{total}$")
-    plt.ylim((min_dev-2)*1e-14,(max_dev+1)*1e-14)
+    plt.ylim((min_dev-2.6)*1e-14,(max_dev+2)*1e-14)
     plt.savefig(f"plot_figures/sim{sim}_dev.pdf")
     plt.show()
 # Choose Simulation to Plot
@@ -62,7 +63,7 @@ def Matrix(Sname,k):
             s_ij = float( data_strList[i][j] ) # make to float
             S[j,i] = s_ij # Add into np.array
     return(S)
-def plot_them(k,S,name):
+def plot_them(k,S,name,label_name):
     time = k*0.000025+0.000025
     # Set up MeshGrid
     M = 200
@@ -73,36 +74,40 @@ def plot_them(k,S,name):
     # Plot
     fig = plt.figure()
     ax = plt.gca()
-    # Normalize
-    norm = matplotlib.cm.colors.Normalize(vmin=0.0, vmax=np.max(S))
     # Some settings
     fontsize = 12
     x_min, x_max = xpoints[0], xpoints[-1]
     y_min, y_max = ypoints[0], ypoints[-1]
-    img = ax.imshow(S,extent=[x_min,x_max,y_min,y_max], cmap=plt.get_cmap("viridis"),norm=norm)
+    if name == 'Sprob':
+        # Normalize
+        norm = matplotlib.cm.colors.Normalize(vmin=0.0, vmax=np.max(S))
+        img = ax.imshow(S,extent=[x_min,x_max,y_min,y_max], cmap=plt.get_cmap("viridis"),norm=norm)
+    else:
+        img = ax.imshow(S,extent=[x_min,x_max,y_min,y_max], cmap=plt.get_cmap("viridis"))
     # Axis labels
-    plt.xlabel("x", fontsize=fontsize)
-    plt.ylabel("y", fontsize=fontsize)
+    plt.xlabel("x", fontsize=fontsize*1.25)
+    plt.ylabel("y", fontsize=fontsize*1.25)
     plt.xticks(fontsize=fontsize)
     plt.yticks(fontsize=fontsize)
     # Add a colourbar
     cbar = fig.colorbar(img, ax=ax)
-    cbar.set_label(r"$p^n_{ij}$", fontsize=fontsize)
+    cbar.set_label(label_name, fontsize=fontsize*1.25)
     cbar.ax.tick_params(labelsize=fontsize)
     time_txt = plt.text(0.95, 0.95, "t = {:.3e}".format(time), color="white", 
                     horizontalalignment="right", verticalalignment="top", fontsize=fontsize)
     plt.savefig(f"plot_figures/{name}_TimeFrame={k}.pdf")
     plt.show()
-def which(name):
+def which(name,label_name):
     # Get time = 0, 0.001, 0.002 atleast
     timeslices = np.array( [0,9,19,29,39,49,59,69,79] ) # Selected Time Frames
     for k in timeslices:
         # Get the matricex
         S = Matrix(name,k)
-        plot_them(k,S,name)
+        plot_them(k,S,name,label_name)
 # name = ['Sprob','Sreal','Simag']
+# label_name = [r"$p^n_{ij}$",r"Re($u_{ij}$)",r"Im($u_{ij}$)"]
 # for i in range(3):
-#     which( name[ i ] )
+#     which( name[ i ] , label_name[ i ] )
 
 
 
@@ -127,8 +132,8 @@ def plot_problem9(sim,slit,head):
     p9 = p9/sum
     # Plot y points vs. p^0.002_0.8,j
     plt.plot(y,p9)
-    plt.xlabel("y")
-    plt.ylabel(r"$p^{0.002}_{0.8,y}$")
+    plt.xlabel("y",fontsize=12)
+    plt.ylabel(r"$p(y|x=0.8;t=0.002)$",fontsize=12)
     plt.title(head)
     plt.savefig(f"plot_figures/problem9_{slit}slit.pdf")
     plt.show()
